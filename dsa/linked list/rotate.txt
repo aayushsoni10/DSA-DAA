@@ -1,0 +1,51 @@
+Rotate List
+Asked in:  
+Amazon
+Given a list, rotate the list to the right by k places, where k is non-negative.
+
+For example:
+
+Given 1->2->3->4->5->NULL and k = 2,
+return 4->5->1->2->3->NULL.
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ListNode* Solution::rotateRight(ListNode* A, int B) {
+    if(B==0)
+        return A;
+    int len = 0;
+    ListNode* l =A;
+    while(l){
+        len++; l=l->next;
+    }
+    int r = B%len;
+    if(r==0)
+        return A;
+    int split = len - r;
+    int c = 0;
+    l=A;
+    ListNode* p = NULL;
+    ListNode* root;
+    while(l){
+        if(c==split){
+            p->next = NULL;
+            root = l;
+            while(l->next){
+                l = l ->next;
+            }
+            l->next = A;
+            return root;
+        }else{
+            c++;
+            p = l;
+            l = l->next;
+        }
+    }
+}
