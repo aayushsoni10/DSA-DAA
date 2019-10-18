@@ -1,0 +1,114 @@
+/*
+Markov takes out his Snakes and Ladders game, stares at the board and wonders: "If I can always roll the die to whatever number I want, what would be the least number of rolls to reach the destination?"
+
+Rules The game is played with a cubic die of  faces numbered  to .
+
+Starting from square , land on square  with the exact roll of the die. If moving the number rolled would place the player beyond square , no move is made.
+
+If a player lands at the base of a ladder, the player must climb the ladder. Ladders go up only.
+
+If a player lands at the mouth of a snake, the player must go down the snake and come out through the tail. Snakes go down only.
+*/
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// Complete the quickestWayUp function below.
+int quickestWayUp(vector<vector<int>> ladders, vector<vector<int>> snakes) {
+    int board[10][10];
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++)
+            board[i][j]=0;
+    }
+    for(int i=0;i<(int)ladders.size();i++){
+        board[(ladders[i][0]-1)/10][(ladders[i][0]-1)%10]=ladders[i][1];
+    }
+    for(int j=0;j<(int)snakes.size();j++){
+        board[(snakes[j][0]-1)/10][(snakes[j][0]-1)%10]=snakes[j][1];
+    }
+    for(int i=0;i<10;i++){
+        for(int j=0;j<10;j++)
+            printf("%d ",board[i][j]);
+    }
+    queue<pair<int,int>> q;
+    vector<vector<int>> dist(10,vector<int>(10,1000));
+    dist[0][0]=0;
+    int f=0;
+    q.push(make_pair(0,0));
+    while(!q.empty()){
+        int x=q.front().first;
+        int y=q.front().second;
+        q.pop();
+        if(board[x][y]!=0){
+            int t=board[x][y];
+            int x1=x;
+            int y1=y;
+            x=(t-1)/10;
+            y=(t-1)%10;
+            dist[x][y]=dist[x1][y1];
+        }
+        if(x==9 && y==9){
+            f=1;
+            break;
+        }
+        for(int i=1;i<7;i++){
+            int ne=(x*10)+y+1+i;
+            if((ne-1)/10<=9 && dist[(ne-1)/10][(ne-1)%10]>dist[x][y]+1){
+                dist[(ne-1)/10][(ne-1)%10]=dist[x][y]+1;
+                q.push(make_pair((ne-1)/10,(ne-1)%10));
+            }
+        }
+    }
+    if(dist[9][9]!=1000)
+        return dist[9][9];
+    return -1;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    int t;
+    cin >> t;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    for (int t_itr = 0; t_itr < t; t_itr++) {
+        int n;
+        cin >> n;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        vector<vector<int>> ladders(n);
+        for (int i = 0; i < n; i++) {
+            ladders[i].resize(2);
+
+            for (int j = 0; j < 2; j++) {
+                cin >> ladders[i][j];
+            }
+
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+
+        int m;
+        cin >> m;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        vector<vector<int>> snakes(m);
+        for (int i = 0; i < m; i++) {
+            snakes[i].resize(2);
+
+            for (int j = 0; j < 2; j++) {
+                cin >> snakes[i][j];
+            }
+
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+
+        int result = quickestWayUp(ladders, snakes);
+
+        fout << result << "\n";
+    }
+
+    fout.close();
+
+    return 0;
+}
