@@ -1,0 +1,52 @@
+#include<bits/stdc++.h>
+using namespace std;
+int spanningTree(vector <pair<int,int> > g[], int n)
+{
+    vector<int> vis(n,0);
+    vis[0] = 1;
+    priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
+    for(int i=0;i<g[0].size();i++){
+        pq.push({g[0][i].first, g[0][i].second});
+    }
+    int ans=0;
+    int l = n-1;
+    while(l!=0){
+        int min_w, ver;
+        while(true){
+            min_w = pq.top().first;
+            ver = pq.top().second;
+            pq.pop();
+            if(!vis[ver])break;
+        }
+        for(int i=0;i<g[ver].size();i++){
+            if(!vis[g[ver][i].second]){
+                pq.push({g[ver][i].first, g[ver][i].second});
+            }
+        }
+        l--;
+        vis[ver] = 1;
+        ans+=min_w;
+    }
+    return ans;
+}
+
+int main()
+{
+    int n,e;
+    int w, mC;
+    cin>>n>>e;
+    vector <pair<int,int> > adj[n];
+    for(int i = 0;i < e;++i)
+    {
+    	int x,y;
+        cin >> x >> y >> w;
+        x--;
+        y--;
+        adj[x].push_back({w, y});
+        adj[y].push_back({w, x});
+    }
+  
+    mC= spanningTree(adj, n);
+    cout << mC << endl;
+    return 0;
+}
