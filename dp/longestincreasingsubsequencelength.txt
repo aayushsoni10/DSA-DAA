@@ -1,0 +1,38 @@
+/*Given an array of integers, find the length of longest subsequence which is first increasing then decreasing.
+
+**Example: **
+
+For the given array [1 11 2 10 4 5 2 1]
+
+Longest subsequence is [1 2 10 4 2 1]
+
+Return value 6
+*/
+int Solution::longestSubsequenceLength(const vector<int> &A) {
+    int lsl[A.size()];
+    for(int i=0;i<A.size();i++)
+        lsl[i]=1;
+    for(int i=1;i<A.size();i++){
+        for(int j=0;j<i;j++){
+            if(A[j]<A[i]){
+                lsl[i]=max(lsl[i],lsl[j]+1);
+            }
+        }
+    }
+    int lsd[A.size()];
+    for(int i=0;i<A.size();i++)
+        lsd[i]=1;
+    for(int i=A.size()-2;i>=0;i--){
+        for(int j=A.size()-1;j>i;j--){
+            if(A[j]<A[i]){
+                lsd[i]=max(lsd[i],lsd[j]+1);
+            }
+        }
+    }
+    int max=1;
+    for(int i=0;i<A.size();i++){
+        if(max<(lsl[i]+lsd[i]))
+            max=lsl[i]+lsd[i];
+    }
+    return max-1;
+}
