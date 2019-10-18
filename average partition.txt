@@ -1,0 +1,62 @@
+vector<vector<vector<bool>>> dp;
+vector<int> res;
+vector<int> org;
+int tot_siz;
+int total_sum;
+bool possible(int ind, int csum, int csiz){
+    if(csiz==0)
+        return csum==0;
+    if(ind>=tot_siz)
+        return false;
+    if(dp[ind][csum][csiz]==false)
+        return false;
+    if(org[ind]<=csum){
+        res.push_back(org[ind]);
+        if(possible(ind+1, csum-org[ind], csiz-1))
+            return true;
+        res.pop_back();
+    }
+    if(possible(ind+1, csum, csiz))
+        return true;
+    return dp[ind][csum][csiz]=false;
+}
+vector<vector<int>> Solution::avgset(vector<int> &A) {
+    vector<vector<int>> ans;
+    total_sum = 0;
+    tot_siz = A.size();
+    sort(A.begin(), A.end());
+    for(auto k:A)
+        total_sum+=k;
+    dp.clear();
+    res.clear();
+    org.clear();
+    org=A;
+    dp.resize(A.size(), vector<vector<bool>>(total_sum+1, vector<bool>(tot_siz, true)));
+    for(int i=1;i<tot_siz;i++){
+        if((total_sum*i)%tot_siz != 0)
+            continue;
+        int sum1 = (total_sum*i)/tot_siz;
+        if(possible(0, sum1, i)){
+            vector<int> res1 = res;
+            vector<int> res2;
+            int p1=0, p2=0;
+            while(p1<A.size() || p2<res.size()){
+                if(p2<res.size() && A[p1]==res[p2]){
+                    p1++;
+                    p2++;
+                    continue;
+                }
+                res2.push_back(A[p1++]);
+            }
+            if(res1.size()>res2.size()){
+                ans.push_back(res2);
+                ans.push_back(res1);
+            }else{
+                ans.push_back(res1);
+                ans.push_back(res2);
+            }
+            return ans;
+        }
+    }
+    return ans;
+}
