@@ -1,0 +1,67 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int sdeo(int s,int d,vector<vector<pair<int,int>>> adje,vector<vector<pair<int,int>>> adjo,int n){
+    vector<vector<int>> dis(n,vector<int>(2));
+    for(int i=0;i<n;i++){
+        dis[i][0]=INT_MAX;
+        dis[i][1]=INT_MAX;
+    }
+    dis[s][0]=0;
+    dis[s][1]=0;
+    priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>,greater<pair<int,pair<int,int>>>> pq;
+    pq.push(make_pair(0,make_pair(s,0)));
+    pq.push(make_pair(0,make_pair(s,1)));
+    while(!pq.empty()){
+        int v=pq.top().second.first;
+        int pw=pq.top().second.second;
+        pq.pop();
+        if(pw==0){
+            for(int i=0;i<(int)adjo[v].size();i++){
+                int v2=adjo[v][i].first;
+                int wt=adjo[v][i].second;
+                if(dis[v2][1]>dis[v][pw]+wt){
+                    dis[v2][1]=dis[v][pw]+wt;
+                    pq.push(make_pair(dis[v2][1],make_pair(v2,1)));
+                }
+            }
+        }else{
+            for(int i=0;i<(int)adje[v].size();i++){
+                int v2=adje[v][i].first;
+                int wt=adje[v][i].second;
+                if(dis[v2][0]>dis[v][pw]+wt){
+                    dis[v2][0]=dis[v][pw]+wt;
+                    pq.push(make_pair(dis[v2][0],make_pair(v2,0)));
+                }
+            }
+        }
+    }
+    if(dis[d][0]!=INT_MAX || dis[d][1]!=INT_MAX)
+        return min(dis[d][0],dis[d][1]);
+    return -1;
+}
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */ 
+    int n,m;
+    scanf("%d %d",&n,&m);
+    vector<vector<pair<int,int>>> adje(n);
+    vector<vector<pair<int,int>>> adjo(n);
+    for(int i=0;i<m;i++){
+        int u,v,w;
+        scanf("%d %d %d",&u,&v,&w);
+        if(w%2==0)
+        {
+            adje[u].push_back(make_pair(v,w));
+            adje[v].push_back(make_pair(u,w));
+        }
+        else{
+            adjo[u].push_back(make_pair(v,w));
+            adjo[v].push_back(make_pair(u,w));
+        }
+    }
+    int s,d;
+    scanf("%d %d",&s,&d);
+    int ans=sdeo(s,d,adje,adjo,n);
+    printf("%d",ans);
+    return 0;
+}
