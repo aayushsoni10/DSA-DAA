@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+#define f first
+#define s second
+
+using namespace std;
+int dx[] = {-1, 0, 0, 1};
+int dy[] = {0, -1, 1, 0};
+int main() {
+	//code
+	int t;
+	cin>>t;
+	while(t--){
+	    int n;
+	    cin>>n;
+	    vector<vector<int>> adj(n, vector<int>(n, 0));
+	    for(int i=0;i<n;i++)
+	        for(int j=0;j<n;j++)
+	            cin>>adj[i][j];
+	    vector<vector<int>> dis(n, vector<int>(n, INT_MAX));
+	    dis[0][0] = adj[0][0];
+	    priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>,
+	        greater<pair<int, pair<int, int>>>> pq;
+	    pq.push({dis[0][0], {0, 0}});
+	    while(!pq.empty()){
+	        int w,i,j;
+	        w = pq.top().f;
+	        i = pq.top().s.f;
+	        j = pq.top().s.s;
+	        pq.pop();
+	        if(w!=dis[i][j])
+	            continue;
+	        for(int l=0;l<4;l++){
+	            if(i+dx[l]>=0 && i+dx[l]<n && j+dy[l]>=0 && j+dy[l]<n){
+	                if(dis[i+dx[l]][j+dy[l]] > dis[i][j] + adj[i+dx[l]][j+dy[l]]){
+	                    dis[i+dx[l]][j+dy[l]] = dis[i][j] + adj[i+dx[l]][j+dy[l]];
+	                    pq.push({dis[i+dx[l]][j+dy[l]], {i+dx[l], j+dy[l]}});
+	                }
+	            }
+	        }
+	    }
+	    cout<<dis[n-1][n-1]<<endl;
+	}
+	return 0;
+}
