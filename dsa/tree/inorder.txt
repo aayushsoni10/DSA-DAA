@@ -1,0 +1,15 @@
+ void inOrder(Node *root) {
+        stack<Node*> s;
+        Node* current=root;
+        while(current || !s.empty()){
+            if(current){
+                s.push(current);
+                current=current->left;
+            }else{
+                Node* t=s.top();
+                s.pop();
+                printf("%d ",t->data);
+                current=t->right;
+            }
+        }
+    }
