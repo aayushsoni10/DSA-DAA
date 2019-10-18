@@ -1,0 +1,35 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+int search(vector<int> &A,int st,int end,int val){
+    for(int i=st;i<=end;i++){
+        if(A[i]==val)
+            return i;
+    }
+    return -1;
+}
+TreeNode* util(vector<int> &A,vector<int> &B,int st,int end,int &poind){
+    if(st>end)  return NULL;
+    TreeNode* t= (TreeNode*)malloc(sizeof(TreeNode));
+    t->val=B[poind--];
+    if(st==end){
+        t->left=NULL;
+        t->right=NULL;
+        return t;
+    }
+    int ind1= search(A,st,end,t->val);
+    t->right = util(A,B,ind1+1,end,poind);
+    t->left = util(A,B,st,ind1-1,poind);
+    return t;
+}
+TreeNode* Solution::buildTree(vector<int> &A, vector<int> &B) {
+    int ind1=A.size()-1;
+    TreeNode* root = util(A,B,0,A.size()-1,ind1);
+    return root;
+}
