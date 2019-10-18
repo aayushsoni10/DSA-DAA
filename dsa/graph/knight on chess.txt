@@ -1,0 +1,29 @@
+// A=n B=m C=sx D=sy E=dx F=dy.
+int valid(int x,int y,int n,int m){
+    if(x>-1 && x<n && y>-1 && y<m)
+        return 1;
+    return 0;
+}
+int Solution::knight(int A, int B, int C, int D, int E, int F) {
+    vector<vector<int>> dis(A,vector<int>(B,A*B));
+    priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>,
+    greater<pair<int,pair<int,int>>>> pq;
+    int dx[]={-2,-2,-1,-1,1,1,2,2};
+    int dy[]={-1,1,2,-2,2,-2,1,-1};
+    dis[C-1][D-1]=0;
+    pq.push(make_pair(0,make_pair(C-1, D-1)));
+    while(!pq.empty()){
+        int x=pq.top().second.first;
+        int y=pq.top().second.second;
+        pq.pop();
+        for(int i=0;i<8;i++){
+            if(valid(x+dx[i],y+dy[i],A,B) && dis[x+dx[i]][y+dy[i]]>dis[x][y]+1){
+                dis[x+dx[i]][y+dy[i]]=dis[x][y]+1;
+                pq.push(make_pair(dis[x+dx[i]][y+dy[i]], make_pair(x+dx[i],y+dy[i])));
+            }
+        }
+    }
+    if(dis[E-1][F-1]==A*B)
+        return -1;
+    return dis[E-1][F-1];
+}
