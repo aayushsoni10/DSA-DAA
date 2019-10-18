@@ -1,0 +1,26 @@
+/*
+Given a binary search tree T, where each node contains a positive integer, and an integer K, you have to find whether or not there exist two different nodes A and B such that A.value + B.value = K.
+
+Return 1 to denote that two such nodes exist. Return 0, otherwise.
+*/
+void inorder(TreeNode* A,vector<int> &v){
+    if(!A)
+        return;
+    inorder(A->left,v);
+    v.push_back(A->val);
+    inorder(A->right,v);
+ }
+int Solution::t2Sum(TreeNode* A, int B) {
+    vector<int> v;
+    inorder(A,v);
+    int i=0;
+    int j=v.size()-1;
+    while(i<j && (v[i]+v[j])!=B){
+        if(v[i]+v[j]>B){
+            j--;
+        }else if(v[i]+v[j]<B){
+            i++;
+        }
+    }
+    return (i>=j)?0:1;
+}
