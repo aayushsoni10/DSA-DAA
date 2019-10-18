@@ -1,0 +1,51 @@
+
+/*
+struct node
+{
+    int data;
+    node* left;
+    node* right;
+}*/
+
+struct Queue{
+    int front;
+    int rear;
+    node* A[9];
+};
+void Enqueue(node* d,Queue* q1){
+    if(q1->rear==-1){
+        q1->rear=0;
+        q1->A[0]=d;
+    }else{
+        q1->rear=(q1->rear+1+9)%9;
+        q1->A[q1->rear]=d;
+    }
+}
+node* Dequeue(Queue *q1){
+    node* temp;
+    temp=q1->A[(q1->front+1+9)%9];
+    q1->front=(q1->front+1+9)%9;
+    return temp;
+}
+void levelOrder(node * root) {
+    node *top;
+    top=root;
+    Queue *q1=new Queue();
+    q1->front=-1;
+    q1->rear=-1;
+    Enqueue(top,q1);
+    node* temp;
+    temp=Dequeue(q1);
+    Enqueue(top,q1);
+    while(q1->rear!=q1->front){
+        node* temp;
+        temp=Dequeue(q1);
+        printf("%d ",temp->data);
+        if(temp->left!=nullptr){
+            Enqueue(temp->left,q1);
+        }
+        if(temp->right!=nullptr){
+            Enqueue(temp->right,q1);
+        }
+    }
+}
