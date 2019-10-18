@@ -1,0 +1,61 @@
+#include <iostream>
+#include <stack>
+#include <cstring>
+using namespace std;
+struct Node{
+    int data;
+    Node *next;
+};
+void Reverse(char *c,int n){
+    stack<char> S;
+    for(int i=0;i<n;i++){
+        S.push(c[i]);
+    }
+    for(int i=0;i<n;i++){
+        c[i]=S.top();
+        S.pop();
+    }
+}
+void ReverseL(Node* head){
+    Node *temp=head;
+    stack<Node*> S;
+    while(temp!=NULL){
+        S.push(temp);
+        temp=temp->next;
+    }
+    Node *pre=S.top();
+    head=pre;
+    S.pop();
+    while(!S.empty()){
+        Node *current = S.top();
+        pre->next=current;
+        pre=pre->next;
+        S.pop();
+    }
+    pre->next=NULL;
+    while(head!=NULL){
+        printf("%d",head->data);
+        head=head->next;
+    }
+}
+int main()
+{
+   char st[51];
+   scanf("%s",st);
+   Reverse(st,strlen(st));
+   printf("%s .",st);
+   Node *a3=new Node();
+   a3->data=4;
+   a3->next=NULL;
+   Node *a2=new Node();
+   a2->data=3;
+   a2->next=a3;
+   Node *a1=new Node();
+   a1->data=2;
+   a1->next=a2;
+   Node *head=new Node();
+   head->data=1;
+   head->next=a1;
+   ReverseL(head);
+   return 0;
+}
