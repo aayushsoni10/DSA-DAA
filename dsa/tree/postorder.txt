@@ -1,0 +1,17 @@
+void postOrder(Node *root) {
+        stack<Node*> s1,s2;
+        s1.push(root);
+        while(!s1.empty()){
+            Node* t = s1.top();
+            s1.pop();
+            s2.push(t);
+            if(t->left)
+                s1.push(t->left);
+            if(t->right)
+                s1.push(t->right);
+        }
+        while(!s2.empty()){
+            printf("%d ",(s2.top())->data);
+            s2.pop();
+        }
+    }
