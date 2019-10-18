@@ -1,0 +1,57 @@
+/*Please note that it's Function problem i.e.
+you need to write your solution in the form of Function(s) only.
+Driver Code to call/invoke your function is mentioned above.*/
+
+/*
+The structure of the class is as follows 
+which contains an integer V denoting the no 
+of vertices and a list of adjacency vertices.
+class Graph
+{
+    int V;
+    list<int> *adj;
+public :
+    Graph(int V);
+    void addEdge(int v,int w);
+    bool isCyclic();
+};
+*/
+/*You are required to complete this method*/
+int dfs_util(int s,vector<int> &col,list<int> adj[]){
+    col[s]=1;
+    int c=0;
+    for(auto it=adj[s].begin();it!=adj[s].end();it++){
+        if(col[*it]==0){
+            int a1=dfs_util(*it,col,adj);
+            if(a1==1){
+                c=1;
+                break;
+            }
+        }else if(col[*it]==1){
+            c=1;
+            break;
+        }
+    }
+    col[s]=2;
+    return c;
+}
+bool Graph :: isCyclic()
+{
+//Your code here
+    int a=0;
+    vector<int> col(V);
+    for(int i=0;i<V;i++)
+        col[i]=0;
+    for(int i=0;i<V;i++){
+        if(col[i]==0)
+        {
+            int a1=dfs_util(i,col,adj);
+            if(a1==1)
+            {
+                a=1;
+                break;
+            }
+        }
+    }
+    return (bool)a;
+}
