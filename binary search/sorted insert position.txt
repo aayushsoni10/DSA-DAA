@@ -1,0 +1,23 @@
+int Solution::searchInsert(vector<int> &A, int B) {
+    // Do not write main() function.
+    // Do not read input, instead use the arguments to the function.
+    // Do not print the output, instead return values as specified
+    // Still have a doubt. Checkout www.interviewbit.com/pages/sample_codes/ for more details
+    int s=0, e=A.size()-1;
+    if(B<A[0])
+        return 0;
+    if(B>A[A.size()-1])
+        return A.size();
+    while(s<e){
+        int m=(s+e)/2;
+        if(A[m]>B)
+            e=m-1;
+        else if(A[m]<B)
+            s=m+1;
+        else
+            return m;
+    }
+    if(A[s]>=B)
+        return s;
+    return s+1;
+}
