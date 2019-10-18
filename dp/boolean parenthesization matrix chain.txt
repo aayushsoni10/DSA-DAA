@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+#define f first
+#define s second
+using namespace std;
+
+int main() {
+	//code
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+	int t;
+	cin>>t;
+	while(t-->0){
+	    int n;
+	    cin>>n;
+	    char c;
+	    vector<int> inp;
+	    vector<char> op;
+	    for(int i=0;i<n;i++){
+	        cin>>c;
+	        if(c=='&' || c=='|' || c=='^'){
+	            op.push_back(c);
+	        }else{
+	            inp.push_back(c=='T'?1:0);
+	        }
+	    }
+	    int s1=inp.size();
+	    vector<vector<pair<long,long>>> dp(s1,vector<pair<long,long>>(s1,make_pair(0,0)));
+	    for(int i=0;i<s1;i++){
+	        if(inp[i]==1)
+	            dp[i][i].f=1;
+	        else
+	            dp[i][i].s=1;
+	    }
+	    for(int l=2;l<=s1;l++){
+	        for(int i=0;i<=s1-l;i++){
+	            int j=i+l-1;
+	            for(int k=i;k<j;k++){
+	                if(op[k]=='|'){
+	                    dp[i][j].f+=(dp[i][k].f*dp[k+1][j].f + dp[i][k].s*dp[k+1][j].f +
+	                        dp[i][k].f*dp[k+1][j].s)%1003;
+	                    dp[i][j].s+=dp[i][k].s*dp[k+1][j].s%1003;
+	                }else if(op[k]=='&'){
+	                    dp[i][j].s+=(dp[i][k].s*dp[k+1][j].s + dp[i][k].s*dp[k+1][j].f +
+	                        dp[i][k].f*dp[k+1][j].s)%1003;
+	                    dp[i][j].f+=dp[i][k].f*dp[k+1][j].f%1003;
+	                }else{
+	                    dp[i][j].f+=(dp[i][k].s*dp[k+1][j].f + dp[i][k].f*dp[k+1][j].s)%1003;
+	                    dp[i][j].s+=(dp[i][k].s*dp[k+1][j].s + dp[i][k].f*dp[k+1][j].f)%1003;
+	                }
+	            }
+	        }
+	    }
+	    cout<<dp[0][s1-1].f%1003<<endl;
+	}
+	return 0;
+}
