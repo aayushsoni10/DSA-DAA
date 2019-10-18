@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+int main(){
+    int n;
+    cin>>n;
+    int m;
+    cin>>m;
+    vector<vector<int>> adj(n, vector<int>(n, INT_MAX));
+    int s, d;
+    for(int i=0;i<n;i++)
+        adj[i][i] = 0;
+    for(int i=0;i<m;i++){
+        int a,b,c;
+        cin>>a>>b>>c;
+        adj[a][b] = c;
+    }
+    cin>>s>>d;
+    vector<int> dis(n, INT_MAX);
+    vector<int> next(n, -1);
+    next[d] = -1;
+    dis[d] = 0;
+    for(int k=d-1; k>=s; k--){
+        for(int l=k+1;l<=d;l++){
+            if(adj[k][l] == INT_MAX)
+                continue;
+            if(dis[k]> dis[l] + adj[k][l]){
+                dis[k] = dis[l] + adj[k][l];
+                next[k] = l;
+            }
+        }
+    }
+    cout<<dis[s];
+    cout<<"PATH :";
+    int ne = s;
+    while(ne!=-1){
+        cout<<ne<<' ';
+        ne = next[ne];
+    }
+    return 0;
+}
