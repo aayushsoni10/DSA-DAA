@@ -1,0 +1,37 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+int graph[1000][1000];
+void bfs(int s, int n){
+	queue<int> q;
+	int level[n]={0};
+	int vis[n]={0};
+	vis[s]=1;
+	level[s]=0;
+	q.push(s);
+	while(!q.empty()){
+		int v=q.front();
+		q.pop();
+		for(int i=0;i<n;i++){
+			if(!vis[i] && graph[v][i]){
+				level[i]= level[v]+1;
+				vis[i]=1;
+				q.push(i);
+			}
+		}
+	}
+	for(int i=0;i<n;i++){
+		printf("%d\n",level[i]);
+	}
+}
+int main(){
+	int n;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		for(int j=0;j<n;j++){
+			scanf("%d",&graph[i][j]);	
+		}
+	}
+	int source = 0;
+	bfs(source,n);
+}
