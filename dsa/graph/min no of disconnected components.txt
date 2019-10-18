@@ -1,0 +1,40 @@
+#include<bits/stdc++.h>
+using namespace std;
+void dfsu(vector<vector<int>> adj, int v, vector<bool> &vis){
+    vis[v] = 1;
+    for(auto k : adj[v])
+        if(!vis[k])
+            dfsu(adj, k, vis);
+}
+int main(){
+    int n;
+    cin>>n;
+    int m;
+    cin>>m;
+    vector<vector<int>> adj(n);
+    vector<int> indegree(n, 0);
+    for(int i=0;i<m;i++){
+        int a,b;
+        cin>>a>>b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+        indegree[a]++;
+        indegree[b]++;
+    }
+    int c =0;
+    queue<int> q;
+    vector<bool> vis(n, false);
+    for(int i=0;i<n;i++)
+        if(indegree[i] == 1 || indegree[i] == 0)
+            q.push(i);
+    while(!q.empty()){
+        int v = q.front();
+        q.pop();
+        if(vis[v])
+            continue;
+        c++;
+        dfsu(adj, v, vis);
+    }
+    cout<<c;
+    return 0;
+}
