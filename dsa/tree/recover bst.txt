@@ -1,0 +1,41 @@
+
+https://www.interviewbit.com/problems/recover-binary-search-tree/
+
+
+
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+vector<int> Solution::recoverTree(TreeNode* A) {
+    vector<pair<int,int>> ino;
+    stack<TreeNode*> s;
+    TreeNode* c=A;
+    int i=0;
+    while(c || !s.empty()){
+        if(c){
+            s.push(c);
+            c=c->left;
+        }else{
+            c=s.top();
+            s.pop();
+            ino.push_back(make_pair(c->val,i++));
+            c=c->right;
+        }
+    }
+    sort(ino.begin(), ino.end());
+    vector<int> ans(2, 0);
+    for(int j=0;j<i;j++){
+        if(ino[j].second == j)
+            continue;
+        ans[0] = ino[j].first;
+        ans[1] = ino[ino[j].second].first;
+        break;
+    }
+    return ans;
+}
