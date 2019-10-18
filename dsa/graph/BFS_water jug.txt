@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int a, b, c;
+    cin>>a>>b>>c;
+    map<pair<int, int>, int> mp;
+    queue<pair<int,int>> q;
+    q.push({0,0});
+    map<pair<int,int>, int>::iterator it;
+    while(!q.empty()){
+        pair<int,int> f = q.front();
+        q.pop();
+        if((f.first == c && f.second == 0)||(f.first==0 && f.second==c)){
+            cout<<f.first<<" "<<f.second<<endl;
+            break;
+        }
+        it = mp.find(f);
+        if(it==mp.end()){
+            cout<<f.first<<" "<<f.second<<endl;
+            mp[f] = 1;
+            pair<int, int> s = f;
+            s.first = 0;
+            it = mp.find(s);
+            if(it==mp.end()){
+                q.push(s);
+            }
+            s.first = f.first;
+            s.second = 0;
+            it = mp.find(s);
+            if(it==mp.end()){
+                q.push(s);
+            }
+            s.second = f.second;
+            s.first = a;
+            it = mp.find(s);
+            if(it==mp.end()){
+                q.push(s);
+            }
+            s.first = f.first;
+            s.second = b;
+            it = mp.find(s);
+            if(it==mp.end()){
+                q.push(s);
+            }
+            s.second = f.second;
+            int l = min(s.first, b - s.second);
+            s.first = s.first - l;
+            s.second = s.second + l;
+            it = mp.find(s);
+            if(it==mp.end()){
+                q.push(s);
+            }
+            s.first = f.first;
+            s.second = f.second;
+            l = min(a - s.first, s.second);
+            s.first = s.first + l;
+            s.second = s.second - l;
+            it = mp.find(s);
+            if(it==mp.end()){
+                q.push(s);
+            }
+        }
+    }
+}
