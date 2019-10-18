@@ -1,0 +1,103 @@
+int at;
+int cap;
+int cur;
+struct dll{
+    int val;
+    dll *next, *prev;
+};
+dll *root, *last;
+unordered_map<int, dll*> pt;
+unordered_map<int, int> m;
+LRUCache::LRUCache(int capacity) {
+    root = NULL;
+    last = NULL;
+    cap=capacity;
+    cur=0;
+    at=0;
+    pt.clear();
+    m.clear();
+}
+
+int LRUCache::get(int key) {
+    if(m.find(key)==m.end())
+        return -1;
+    dll *c = pt[key];
+    if(c==root)
+        return m[key];
+    if(c==last){
+        last = c->prev;
+        c->prev->next = NULL;
+    }else{
+        c->prev->next = c->next;
+        c->next->prev = c->prev;
+    }
+    c->prev = NULL;
+    c->next = root;
+    if(root)
+    root->prev = c;
+    pt[key] = c;
+    root=c;
+    return m[key];
+}
+
+void LRUCache::set(int key, int value) {
+    if(m.find(key)!=m.end()){
+        m[key]=value;
+        dll *c = pt[key];
+        if(c==root){
+            return;
+        }
+        if(c==last){
+            last=c->prev;
+            c->prev->next = NULL;
+        }else{
+            c->prev->next = c->next;
+            c->next->prev = c->prev;
+        }
+        c->prev = NULL;
+        c->next = root;
+        if(root)
+            root->prev=c;
+        pt[key] = c;
+        root = c;
+        return;
+    }
+    if(cap==1 && cur==1){
+        m.erase(root->val);
+        pt.erase(root->val);
+        root->val = key;
+        m[key] = value;
+        pt[key] = root;
+        return;
+    }
+    if(cur<cap){
+        cur++;
+        dll *c = new dll();
+        c->prev = NULL;
+        c->val = key;
+        c->next = root;
+        if(root)
+            root->prev = c;
+        root = c;
+        m[key] = value;
+        pt[key] = c;
+        if(cur==1){
+            last = root;    
+        }
+    }else{
+        dll *nl = last->prev;
+        last->prev->next = NULL;
+        last->prev = NULL;
+        m.erase(last->val);
+        pt.erase(last->val);
+        last->val = key;
+        last->prev = NULL;
+        last->next = root;
+        if(root)
+            root->prev = last;
+        root = last;
+        m[key] = value;
+        pt[key] = last;
+        last = nl;
+    }
+}
