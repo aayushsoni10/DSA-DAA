@@ -1,0 +1,17 @@
+void preOrder(Node *root) {
+        stack<Node*> s;
+        while(1){
+            while(root){
+                printf("%d ",root->data);
+                s.push(root);
+                root=root->left;
+            }
+            if(!s.empty()){
+                Node* temp=s.top();
+                s.pop();
+                root=temp->right;
+            }else{
+                break;
+            }
+        }
+    }
