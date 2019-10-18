@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+int OST(int k[], int f[], int n){
+    vector<vector<pair<int,int>>> dp(n, vector<pair<int,int>>(n,make_pair(0, -1)));
+    for(int i=0;i<n;i++)
+        dp[i][i] = make_pair(f[i], i);
+    for(int l=2;l<=n;l++){
+        for(int i=0; i<=n-l;i++){
+            int j=i+l-1;
+            int t1 = INT_MAX;
+            int r=-1;
+            int s=0;
+            for(int k=i;k<=j;k++){
+                s+= dp[k][k].first;
+                int l=0;
+                if(k>i){
+                    l+=dp[i][k-1].first;
+                }
+                if(k<j){
+                    l+=dp[k+1][j].first;
+                }
+                if(l<t1){
+                    t1=l;
+                    r=k;
+                }
+            }
+            dp[i][j].first = t1+s;
+            dp[i][j].second = r;
+        }
+    }
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++)
+            cout<<dp[i][j].first<<' ';
+        cout<<endl;
+    }
+    return dp[0][n-1].first;
+}
+
+int main(){
+    int keys[] = {10, 12, 20}; 
+    int freq[] = {34, 8, 50}; 
+    int n = sizeof(keys)/sizeof(keys[0]); 
+    printf("Cost of Optimal BST is %d ",  
+               OST(keys, freq, n));
+    return 0;
+}
