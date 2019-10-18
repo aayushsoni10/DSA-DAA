@@ -1,0 +1,28 @@
+string Solution::longestPalindrome(string A) {
+    int max_len=1;
+    int start=0;
+    int n=A.size();
+    for(int i=1;i<n;i++){
+        int low=i-1;
+        int high=i;
+        while(low>=0 && high<n && A[low]==A[high]){
+            if(high-low+1>max_len){
+                max_len=high-low+1;
+                start=low;
+            }
+            low--;
+            high++;
+        }
+        low=i-1;
+        high=i+1;
+        while(low>=0 && high<n && A[low]==A[high]){
+            if(high-low+1>max_len){
+                max_len=high-low+1;
+                start=low;
+            }
+            low--;
+            high++;
+        }
+    }
+    return A.substr(start,max_len);
+}
