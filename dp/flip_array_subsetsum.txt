@@ -1,0 +1,35 @@
+/*Given an array of positive elements, you have to flip the sign of some of its elements such that the resultant sum of the elements of array should be minimum non-negative(as close to zero as possible). Return the minimum no. of elements whose sign needs to be flipped such that the resultant sum is minimum non-negative.*/
+
+int Solution::solve(const vector<int> &A) {
+    int sum=0;
+    for(int i=0;i<(int)A.size();i++)
+        sum+=A[i];
+    pair<int,int> dp[A.size()][(sum/2)+1];
+    for(int i=0;i<1+(sum/2);i++){
+        if(i<A[0])
+            dp[0][i]=make_pair(0,0);
+        else
+            dp[0][i]=make_pair(A[0],1);
+    }
+    for(int i=1;i<A.size();i++){
+        for(int j=0;j<1+(sum/2);j++){
+            if(j<A[i]){
+                dp[i][j]=dp[i-1][j];
+            }else{
+                int x,y;
+                if(A[i]+dp[i-1][j-A[i]].first==dp[i-1][j].first){
+                    x=dp[i-1][j].first;
+                    y=min(1+dp[i-1][j-A[i]].second, dp[i-1][j].second);
+                }else if(A[i]+dp[i-1][j-A[i]].first>dp[i-1][j].first){
+                    x=A[i]+dp[i-1][j-A[i]].first;
+                    y=1+dp[i-1][j-A[i]].second;
+                }else{
+                    x=dp[i-1][j].first;
+                    y=dp[i-1][j].second;
+                }
+                dp[i][j]=make_pair(x,y);
+            }
+        }
+    }
+    return dp[A.size()-1][(sum/2)].second;
+}
