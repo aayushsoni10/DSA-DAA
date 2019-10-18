@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void dfs(vector<int> adj[], int u, int &count, int &d, vector<bool> &vis, vector<int> &path){
+    vis[u] = 1;
+    path.push_back(u);
+    if(u==d){
+        vis[u] = 0;
+        count++;
+        for(int i=0;i<path.size();i++)
+            cout<<path[i]<<" ";
+        cout<<endl;
+        path.pop_back();
+        return;
+    }
+    for(auto i : adj[u]){
+        if(!vis[i]){
+            dfs(adj, i, count, d, vis, path);
+        }
+    }
+    vis[u] = 0;
+    path.pop_back();
+}
+int main() {
+	//code
+	int t;
+	cin>>t;
+	while(t--){
+	    int v, e;
+	    cin>>v>>e;
+	    vector<int> adj[v];
+	    for(int i=0;i<e;i++){
+	        int a,b;
+	        cin>>a>>b;
+	        adj[a].push_back(b);
+	    }
+	    int s,d;
+	    cin>>s>>d;
+	    int count = 0;
+	    vector<bool> vis(v, 0);
+	    vector<int> path;
+	    dfs(adj, s, count, d, vis, path);
+	    cout<<count<<endl;
+	}
+	return 0;
+}
