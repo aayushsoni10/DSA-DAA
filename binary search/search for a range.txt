@@ -1,0 +1,41 @@
+vector<int> Solution::searchRange(const vector<int> &A, int B) {
+    // Do not write main() function.
+    // Do not read input, instead use the arguments to the function.
+    // Do not print the output, instead return values as specified
+    // Still have a doubt. Checkout www.interviewbit.com/pages/sample_codes/ for more details
+    if(A.size()==1 && A[0]==B){
+        vector<int> ans(2, 0);
+        return ans;
+    }
+    int s=0, e=A.size()-1, k1=-1, k2=-1;
+    while(s<=e){
+        int m=(s+e)/2;
+        if(A[m]>B)
+            e=m-1;
+        else if(A[m]<B)
+            s=m+1;
+        else{
+            k1=m;
+            e=m-1;
+        }
+    }
+    vector<int> ans(2, -1);
+    if(k1==-1){
+        return ans;
+    }
+    s=0; e=A.size()-1;
+    while(s<=e){
+        int m=(s+e)/2;
+        if(A[m]>B)
+            e=m-1;
+        else if(A[m]<B)
+            s=m+1;
+        else{
+            k2=m;
+            s=m+1;
+        }
+    }
+    ans[0]=k1;
+    ans[1]=k2;
+    return ans;
+}
