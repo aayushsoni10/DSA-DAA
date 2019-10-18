@@ -1,0 +1,23 @@
+    void postOrder(Node *root) {
+        stack<Node*> s;
+        Node* current = root;
+        while(current || !s.empty()){
+            if(current){
+                s.push(current);
+                current=current->left;
+            }else{
+                Node* t = s.top();
+                if(t->right){
+                    current = t->right;
+                }else{
+                    printf("%d ",t->data);
+                    s.pop();
+                    while(!s.empty() && (s.top())->right==t){
+                        printf("%d ",s.top()->data);
+                        t=s.top();
+                        s.pop();
+                    }
+                }
+            }
+        }
+    }
