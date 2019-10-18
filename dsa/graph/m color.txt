@@ -1,0 +1,43 @@
+using namespace std;
+
+int isSafe(vector<int> adj[], int i, int k, vector<int> &col){
+    for(auto l : adj[i])
+        if(col[l]==k)
+            return false;
+    return true;
+}
+int solve(vector<int> adj[], vector<int> &col, int n, int i, int m){
+    if(i==n)
+        return true;
+    for(int k=0;k<m;k++){
+        if(isSafe(adj, i, k, col)){
+            col[i]=k;
+            if(solve(adj, col, n , i+1, m))
+                return true;
+            col[i] = -1;
+        }
+    }
+    return false;
+}
+
+int main() {
+	//code
+	int t;
+	cin>>t;
+	while(t--){
+	    int n,m,e;
+	    cin>>n>>m>>e;
+	    vector<int> adj[n];
+	    for(int i=0;i<e;i++){
+	        int s,v;
+	        cin>>s>>v;
+	        s--;
+	        v--;
+	        adj[s].push_back(v);
+	        adj[v].push_back(s);
+	    }
+	    vector<int> col(n, -1);
+	    cout<<solve(adj, col, n, 0, m)<<endl;
+	}
+	return 0;
+}
