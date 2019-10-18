@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+using namespace std;
+void seive(int s, int end, vector<int> &ans){
+    vector<bool> primes(end+1, 1);
+    for(int i=2;i*i<=end;i++){
+        if(primes[i]==0)
+            continue;
+        for(int j=i+i;j<=end;){
+            primes[j]=0;
+            j = j + i;
+        }
+    }
+    for(int i=s;i<=end;i++){
+        if(primes[i])
+            ans.push_back(i);
+    }
+}
+int main() {
+	//code
+	vector<int> primes;
+	seive(1000, 9999, primes);
+	list<int> adj[primes.size()];
+	for(int i=0;i<primes.size();i++){
+	    string n1 = to_string(primes[i]);
+	    for(int j=i+1;j<primes.size();j++){
+	        string n2 = to_string(primes[j]);
+	        int c = 0;
+	        if(n1[0]!=n2[0])
+	            c++;
+	        if(n1[1]!=n2[1])
+	            c++;
+	        if(n1[2]!=n2[2])
+	            c++;
+	        if(n1[3]!=n2[3])
+	            c++;
+	        if(c==1){
+	            adj[i].push_back(j);
+	            adj[j].push_back(i);
+	        }
+	    }
+	}
+	int s = 1033;
+	int d = 1033;
+	int vs, vd;
+	for(int i=0;i<primes.size();i++){
+	    if(primes[i]==s){
+	        vs = i;
+	    }
+	    if(primes[i]==d){
+	        vd = i;
+	    }
+	}
+	queue<int> q;
+	q.push(vs);
+	vector<int> vis(primes.size(), 0);
+	vis[vs] = 1;
+	while(!q.empty()){
+	    int cv = q.front();
+	    q.pop();
+	    if(cv==vd)
+	        break;
+	    list<int>::iterator it;
+	    for(it = adj[cv].begin();it!=adj[cv].end();it++){
+	        if(vis[*it]==0){
+	            vis[*it] = vis[cv] + 1;
+	            q.push(*it);
+	        }
+	    }
+	}
+	cout<<vis[vd]-1;
+	return 0;
+}
