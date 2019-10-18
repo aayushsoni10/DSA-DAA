@@ -1,0 +1,75 @@
+Given an array containing one digit numbers only, assuming we are standing at first index, we need to reach to end of array using minimum number of steps where in one step, we can jump to neighbor indices or can jump to a position with same value.
+
+In other words, if we are at index i, then in one step you can reach to, arr[i-1] or arr[i+1] or arr[K] such that arr[K] = arr[i] (value of arr[K] is same as arr[i])
+
+Examples:
+
+Input : arr[] = {5, 4, 2, 5, 0}
+Output : 2
+Explanation : Total 2 step required.
+We start from 5(0), in first step jump to next 5 
+and in second step we move to value 0 (End of arr[]).
+
+Input  : arr[] = [0, 1, 2, 3, 4, 5, 6, 7, 5, 4,
+                 3, 6, 0, 1, 2, 3, 4, 5, 7]
+Output : 5
+Explanation : Total 5 step required.
+0(0) -> 0(12) -> 6(11) -> 6(6) -> 7(7) ->
+(18)                                                          
+(inside parenthesis indices are shown)
+
+CODE :
+
+#include<bits/stdc++.h>
+
+using namespace std;
+
+int main(){
+    int n;
+    cin>>n;
+    vector<int> vec(n, 0);
+    vector<int> adj[10];
+    for(int i=0;i<n;i++){
+        cin>>vec[i];
+        adj[vec[i]].push_back(i);
+    }
+    queue<int> q;
+    vector<int> vis(n, -1);
+    vis[0] = 0;
+    q.push(0);
+    while(!q.empty()){
+        int a = q.front();
+        q.pop();
+        if(a == n-1){
+            cout<<vis[n-1];
+            break;
+        }
+        if(a+1<n){
+            if(vis[a+1]==-1){
+                vis[a+1] = vis[a] + 1;
+                q.push(a+1);
+            }else if(vis[a+1]>vis[a]+1){
+                vis[a+1] = vis[a] + 1;
+                q.push(a+1);
+            }
+        }
+        if(a-1>-1){
+            if(vis[a-1]==-1){
+                vis[a-1] = vis[a] + 1;
+                q.push(a-1);
+            }else if(vis[a-1]>vis[a]+1){
+                vis[a-1] = vis[a] + 1;
+                q.push(a-1);
+            }
+        }
+        for(auto i : adj[vec[a]]){
+            if(vis[i]==-1){
+                vis[i] = vis[a] + 1;
+                q.push(i);
+            }else if(vis[i]>vis[a]+1){
+                vis[i] = vis[a] + 1;
+                q.push(i);
+            }
+        }
+    }
+}
