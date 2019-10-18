@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+#define f first
+#define s second
+using namespace std;
+
+int main() {
+	int n;
+	int m;
+	cin>>n>>m;
+	list<pair<int, int>> adj[n];
+	vector<pair<int, pair<int, int>>> edges;
+	for(int i=0;i<m;i++){
+	    int a,b,c;
+	    cin>>a>>b>>c;
+	    adj[a].push_back({b, c});
+	    edges.push_back({c, {a, b}});
+	}
+	float min = INT_MAX;
+	for(int i=0;i<m;i++){
+	    int d = edges[i].s.f;
+	    int st = edges[i].s.s;
+	    int w = edges[i].f;
+	    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+	    adj[st].remove({d, w});
+	    adj[d].remove({st, w});
+	    vector<int> par(n, -1);
+	    pq.push({0, st});
+	    vector<int> dis(n, INT_MAX);
+	    dis[st] = 0;
+	    while(!pq.empty()){
+	        int cw = pq.top().f;
+	        int cv = pq.top().s;
+	        pq.pop();
+	        if(dis[cv] != cw)
+	            continue;
+	        for(auto k : adj[cv]){
+	            if(dis[k.f] > k.s + dis[cv]){
+	                par[k.f] = cv;
+	                dis[k.f] = k.s + dis[cv];
+	                pq.push({dis[k.f], k.f});
+	            }
+	        }
+	    }
+	    if(dis[d]!=INT_MAX){
+	        int nv = 0;
+	        int dd = d;
+	        while(dd!=-1){
+	            nv++;
+	            dd = par[dd];
+	        }
+	        if(min>(dis[d]+w+0.0)/nv)
+	            min = (dis[d]+w+0.0)/nv;
+	    }
+	}
+	cout<<min;
+	return 0;
+}
