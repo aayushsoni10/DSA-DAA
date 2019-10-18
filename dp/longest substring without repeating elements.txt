@@ -1,0 +1,23 @@
+    int lengthOfLongestSubstring(string s) {
+        int n=s.length();
+        if(n==0)
+            return n;
+        int cur_len=1;
+        int max_len=1;
+        vector<int> arr(256,-1);
+        arr[s[0]]=0;
+        for(int i=1;i<n;i++){
+            int pre_ind = arr[s[i]];
+            if(pre_ind==-1 || i-pre_ind>cur_len)
+                cur_len++;
+            else{
+                if(cur_len>max_len)
+                    max_len=cur_len;
+                cur_len=i-pre_ind;
+            }
+            arr[s[i]]=i;
+        }
+        if(cur_len>max_len)
+            max_len=cur_len;
+        return max_len;
+    }
