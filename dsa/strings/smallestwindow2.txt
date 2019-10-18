@@ -1,0 +1,56 @@
+// C++ program to find the smallest window containing
+// all characters of a pattern.
+#include<bits/stdc++.h>
+using namespace std;
+
+const int MAX_CHARS = 256;
+
+// Function to find smallest window containing
+// all distinct characters
+string findSubString(string str)
+{
+	int l1=str.length();
+    string s2="";
+    int vis[256]={0};
+    for(int i=0;i<l1;i++){
+        if(!vis[str[i]]){
+            vis[str[i]]=1;
+            s2.push_back(str[i]);
+        }
+    }
+    int l2=s2.length();
+    int hash_s[256]={0};
+    int hash_p[256]={0};
+    for(int i=0;i<l2;i++)
+        hash_p[s2[i]]++;
+    int start=0,start_index=-1,count=0,min_len=INT_MAX;
+    for(int j=0;j<l1;j++){
+        hash_s[str[j]]++;
+        if(hash_p[str[j]]!=0 && hash_s[str[j]]<=hash_p[str[j]])
+            count++;
+        if(count==l2){
+            while(hash_s[str[start]]>hash_p[str[start]] || hash_p[str[start]]==0){
+                if(hash_s[str[start]]>hash_p[str[start]])
+                    hash_s[str[start]]--;
+                start++;
+            }
+            int len_w = j-start+1;
+            if(min_len>len_w){
+                min_len=len_w;
+                start_index=start;
+            }
+        }
+    }
+    if(start_index!=-1)
+        return str.substr(start_index,min_len);
+    return "";
+}
+
+// Driver code
+int main()
+{
+	string str = "aabcbcdbca";
+	cout << "Smallest window containing all distinct"
+			" characters is " << findSubString(str);
+	return 0;
+}
