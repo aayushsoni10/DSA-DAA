@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+int dx[]={-2,-2,-1,-1,1,1,2,2};
+int dy[]={-1,1,-2,2,-2,2,-1,1};
+int isSafe(vector<vector<int>> &arr, int r, int c){
+    if(r>= arr.size() || c>=arr.size() || arr[r][c]!=-1)
+        return false;
+    return 1;
+}
+int solve(vector<vector<int>> &arr, int val, int row, int col){
+    arr[row][col]=val;
+    if(val== arr.size()*arr.size() -1){
+        return true;
+    }
+    for(int i=0;i<8;i++){
+        if(isSafe(arr, row+dx[i], col+dy[i])){
+            if(solve(arr, val+1, row+dx[i], col+dy[i]))
+                return true;
+        }
+    }
+    arr[row][col]= -1;
+    return false;
+}
+int main() {
+    int n;
+    cin>>n;
+    vector<vector<int>> arr(n, vector<int> (n, -1));
+    arr[0][0]=0;
+    cout<<solve(arr, 0, 0, 0)<<endl;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++)
+            cout<<arr[i][j]<<' ';
+        cout<<endl;
+    }
+    return 0;
+}
