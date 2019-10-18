@@ -1,0 +1,55 @@
+#include<stdio.h>
+#include<string.h>
+#define MAX_SIZE 100000
+int A[MAX_SIZE];
+int front=-1;
+int rear=-1;
+int reverse=0;
+void Enqueue(int x){
+	if(front==-1 && rear==-1){
+		front=0;
+		rear=0;
+		A[0]=x;
+	}
+	else if (reverse==0){
+	    rear=(rear+1+MAX_SIZE)%MAX_SIZE;
+	    A[rear]=x;
+	}else if(reverse==1){
+		front=(front-1+MAX_SIZE)%MAX_SIZE;
+		A[front]=x;
+	}
+}
+void Dequeue(){
+	if(reverse==0){
+		printf("%d\n",A[front]);
+		front=(front+1+MAX_SIZE)%MAX_SIZE;
+	}
+	else{
+		printf("%d\n",A[rear]);
+		rear=(rear-1+MAX_SIZE)%MAX_SIZE;
+	}
+}
+void Rev(){
+	if(reverse==0){
+		reverse=1;
+	}else{
+		reverse=0;
+	}
+}
+int main(){
+	int n;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		int type;
+		scanf("%d",&type);
+		if(type==1){
+			int x;
+			scanf("%d",&x);
+			Enqueue(x);
+		}else if(type==2){
+			Dequeue();
+		}else if(type==3){
+			Rev();
+		}
+	}
+}
