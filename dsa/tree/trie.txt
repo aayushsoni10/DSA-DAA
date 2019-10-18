@@ -1,0 +1,52 @@
+/*
+Given a set of reviews provided by the customers for different hotels and a string containing “Good Words”, you need to sort the reviews in descending order according to their “Goodness Value” (Higher goodness value first). We define the “Goodness Value” of a string as the number of “Good Words” in that string.
+
+Note: Sorting should be stable. If review i and review j have the same “Goodness Value” then their original order would be preserved.
+*/
+
+
+bool mycom(const pair<int, int> &a, const pair<int, int> &b){
+    if(a.first<b.first)
+        return false;
+    if(a.first==b.first)
+        return a.second<b.second;
+    return true;
+}
+vector<int> Solution::solve(string A, vector<string> &B) {
+    unordered_set<string> s;
+    string k = "";
+    for(int i=0;i<A.size();i++){
+        if(A[i]=='_'){
+            s.insert(k);
+            k = "";
+        }else{
+            k+=A[i];
+        }
+    }
+    s.insert(k);
+    vector<pair<int, int>> vals(B.size(), {-1, -1});
+    for(int i=0;i<B.size();i++){
+        k="";
+        int v=0;
+        for(int j=0;j<B[i].size();j++){
+            if(B[i][j]=='_'){
+                if(s.find(k)!=s.end()){
+                    v++;
+                }
+                k="";
+            }else{
+                k+=B[i][j];
+            }
+        }
+        if(s.find(k)!=s.end()){
+            v++;
+        }
+        vals[i] = {v, i};
+    }
+    sort(vals.begin(), vals.end(), mycom);
+    vector<int> ans;
+    for(int i=0;i<vals.size();i++){
+        ans.push_back(vals[i].second);
+    }
+    return ans;
+}
