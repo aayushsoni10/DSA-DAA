@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+#define f first
+#define s second
+using namespace std;
+
+int main() {
+	int n;
+	int m;
+	cin>>n>>m;
+	list<pair<int, int>> adj[n];
+	vector<pair<int, pair<int, int>>> edges;
+	for(int i=0;i<m;i++){
+	    int a,b,c;
+	    cin>>a>>b>>c;
+	    adj[a].push_back({b, c});
+	    adj[b].push_back({a, c});
+	    edges.push_back({c, {a, b}});
+	}
+	int min = INT_MAX;
+	int count = 0;
+	for(int i=0;i<m;i++){
+	    int st = edges[i].s.f;
+	    int d = edges[i].s.s;
+	    int w = edges[i].f;
+	    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+	    adj[st].remove({d, w});
+	    adj[d].remove({st, w});
+	    pq.push({0, st});
+	    vector<int> dis(n, INT_MAX);
+	    dis[st] = 0;
+	    while(!pq.empty()){
+	        int cw = pq.top().f;
+	        int cv = pq.top().s;
+	        pq.pop();
+	        if(dis[cv] != cw)
+	            continue;
+	        for(auto k : adj[cv]){
+	            if(dis[k.f] > k.s + dis[cv]){
+	                dis[k.f] = k.s + dis[cv];
+	                pq.push({dis[k.f], k.f});
+	            }
+	        }
+	    }
+	    if(dis[d]!=INT_MAX && min>dis[d]+w){
+	        min = dis[d] + w;
+	        count = 1;
+	    }else if(dis[d]!=INT_MAX && min == dis[d] + w){
+	        count++;
+	    }
+	}
+	cout<<count<<' '<<min;
+	return 0;
+}
