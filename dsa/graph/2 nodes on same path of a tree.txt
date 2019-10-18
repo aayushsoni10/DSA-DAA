@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void dfs(vector<bool> &vis, int s, vector<int> adj[], int &a, int &b, int &ans, int parent){
+    if(s==a){
+        if(vis[b]){
+            ans=1;
+            return;
+        }
+    }
+    if(s==b)
+        if(vis[a]){
+            ans=1;
+            return;
+        }
+    vis[s] = 1;
+    for(auto i : adj[s]){
+        if(!vis[i] && i!=parent)
+            dfs(vis, i, adj, a, b, ans, s);
+    }
+    vis[s] = 0;
+}
+int main() {
+    int n;
+    cin>>n;
+    int e;
+    cin>>e;
+    vector<int> adj[n];
+    for(int i=0;i<e;i++){
+        int a,b;
+        cin>>a>>b;
+        adj[a-1].push_back(b-1);
+        adj[b-1].push_back(a-1);
+    }
+    int a,b;
+    cin>>a>>b;
+    vector<bool> vis(n, 0);
+    int ans = 0;
+    a = a-1;
+    b = b-1;
+    dfs(vis, 0, adj, a, b, ans, -1);
+    cout<<ans;
+}
