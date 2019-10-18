@@ -1,0 +1,32 @@
+https://www.interviewbit.com/problems/shortest-unique-prefix/
+
+
+
+vector<string> Solution::prefix(vector<string> &A) {
+    map<string, int> mp;
+    vector<string> ans(A.size(), "");
+    string c = "";
+    string k = "";
+    map<string, int>::iterator it;
+    for(int i=0;i<A.size();i++){
+        c = A[i];
+        for(int j=0;j<A[i].length();j++){
+            k.push_back(A[i][j]);
+            it = mp.find(k);
+            if(it==mp.end()){
+                mp[k] = i;
+                ans[i] = k;
+                break;
+            }else {
+                string change = it->first;
+                int cid = it->second;
+                change.push_back(A[cid][j+1]);
+                if(ans[cid].length()>(j+1)) continue;
+                mp[change] = cid;
+                ans[cid] = change;
+            }
+        }
+        k = "";
+    }
+    return ans;
+}
