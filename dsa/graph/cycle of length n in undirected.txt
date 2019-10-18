@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+int arr[2000][2000]={0};
+void dfs_util(int used[],int ver,int size,int n,int start,int &count){
+    used[ver]=1;
+    if(size==0){
+        used[ver]=0;
+        if(arr[ver][start]==1){
+            count++;
+            return;
+        }else
+            return;
+    }
+    for(int i=0;i<n;i++){
+        if(used[i]==0 && arr[ver][i]==1){
+            dfs_util(used,i,size-1,n,start,count);
+        }
+    }
+    used[ver]=0;
+}
+int cc(int n){
+    int used[n]={0};
+    int count=0;
+    int cs=4;
+    for(int i=0;i<(n-(cs-1));i++){
+        dfs_util(used,i,cs-1,n,i,count);
+        used[i]=1;
+    }
+    return count/2;
+}
+int main(){
+    //ios_base::sync_with_stdio(false);
+    //cin.tie(NULL);
+    int n;
+    scanf("%d",&n);
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            scanf("%d",&arr[i][j]);
+        }
+    }
+    int ans=cc(n);
+    printf("%d",ans);
+    return 0;
+}
