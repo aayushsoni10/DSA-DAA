@@ -1,0 +1,106 @@
+#include<bits/stdc++.h>
+#define s second
+using namespace std;
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    int n;
+    cin>>n;
+    vector<vector<int>> road(n,vector<int>(n));
+    for(int i=0;i<n;i++)
+        for(int j=0;j<n;j++)
+            cin>>road[i][j];
+    vector<vector<int>> rail(n,vector<int>(n));
+    for(int i=0;i<n;i++)
+        for(int j=0;j<n;j++)
+            cin>>rail[i][j];
+    int s,d;
+    cin>>s>>d;
+    s--;
+    d--;
+    vector<int> dra1(n,INT_MAX);
+    dra1[s]=0;
+    priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
+    pq.push(make_pair(0,s));
+    while(!pq.empty()){
+        int s1=pq.top().s;
+        pq.pop();
+        for(int i=0;i<n;i++){
+            if(dra1[i]>dra1[s1]+rail[s1][i]){
+                dra1[i]=dra1[s1]+rail[s1][i];
+                pq.push(make_pair(dra1[i],i));
+            }
+        }
+    }
+    vector<int> dro1(n,INT_MAX);
+    dro1[s]=0;
+    pq.push(make_pair(0,s));
+    while(!pq.empty()){
+        int s1=pq.top().s;
+        pq.pop();
+        for(int i=0;i<n;i++){
+            if(dro1[i]>dro1[s1]+road[s1][i]){
+                dro1[i]=dro1[s1]+road[s1][i];
+                pq.push(make_pair(dro1[i],i));
+            }
+        }
+    }
+    for(int i=0;i<n;i++)
+        for(int j=i+1;j<n;j++){
+            int t=road[i][j];
+            road[i][j]=road[j][i];
+            road[j][i]=t;
+        }
+    for(int i=0;i<n;i++)
+        for(int j=i+1;j<n;j++){
+            int t=rail[i][j];
+            rail[i][j]=rail[j][i];
+            rail[j][i]=t;
+        }
+    vector<int> dra2(n,INT_MAX);
+    dra2[d]=0;
+    pq.push(make_pair(0,d));
+    while(!pq.empty()){
+        int s1=pq.top().s;
+        pq.pop();
+        for(int i=0;i<n;i++){
+            if(dra2[i]>dra2[s1]+rail[s1][i]){
+                dra2[i]=dra2[s1]+rail[s1][i];
+                pq.push(make_pair(dra2[i],i));
+            }
+        }
+    }
+    vector<int> dro2(n,INT_MAX);
+    dro2[d]=0;
+    pq.push(make_pair(0,d));
+    while(!pq.empty()){
+        int s1=pq.top().s;
+        pq.pop();
+        for(int i=0;i<n;i++){
+            if(dro2[i]>dro2[s1]+road[s1][i]){
+                dro2[i]=dro2[s1]+road[s1][i];
+                pq.push(make_pair(dro2[i],i));
+            }
+        }
+    }
+    int min=INT_MAX;
+    for(int i=0;i<n;i++){
+        if(dro1[i]!=INT_MAX && dra2[i]!=INT_MAX && (i!=s && i!=d)){
+            if(min>dro1[i]+dra2[i]){
+                min=dro1[i]+dra2[i];
+                //cout<<i<<" "<<dro1[i]<<" "<<dra2[i]<<endl;
+            }
+        }
+    }
+    for(int i=0;i<n;i++){
+        if(dra1[i]!=INT_MAX && dro2[i]!=INT_MAX && (i!=s && i!=d)){
+            if(min>dra1[i]+dro2[i]){
+                min=dra1[i]+dro2[i];
+                //cout<<i<<endl;
+            }
+        }
+    }
+    cout<<min;
+    return 0;
+}
