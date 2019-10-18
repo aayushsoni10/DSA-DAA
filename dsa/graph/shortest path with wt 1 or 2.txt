@@ -1,0 +1,55 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int n;
+    cin>>n;
+    int m;
+    cin>>m;
+    vector<vector<int>> adj(n);
+    for(int i=0;i<m;i++){
+        int a,b,c;
+        cin>>a>>b>>c;
+        if(c%2==0){
+            vector<int> temp;
+            int ind = adj.size();
+            adj.push_back(temp);
+            adj[a].push_back(ind);
+            adj[ind].push_back(a);
+            adj[ind].push_back(b);
+            adj[b].push_back(ind);
+        }else{
+            adj[a].push_back(b);
+            adj[b].push_back(a);
+        }
+    }
+    int s;
+    cin>>s;
+    vector<int> dis(adj.size(), INT_MAX);
+    dis[s] = 0;
+    queue<int> q;
+    q.push(s);
+    vector<int> par(adj.size(), -1);
+    while(!q.empty()){
+        int i=q.front();
+        q.pop();
+        for(auto k : adj[i]){
+            if(dis[k] > dis[i] + 1){
+                dis[k] = dis[i] + 1;
+                par[k] = i;
+                q.push(k);
+            }
+        }
+    }
+    int i=0;
+    int d;
+    cin>>d;
+    while(par[d]!=-1){
+        cout<<d<<' ';
+        d = par[d];
+        if(d>=n){
+            d = adj[d][0];
+        }
+    }
+    cout<<s;
+    return 0;
+}
