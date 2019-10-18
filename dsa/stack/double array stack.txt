@@ -1,0 +1,43 @@
+#include <iostream>
+
+using namespace std;
+struct AStack{
+    int capacity;
+    int top;
+    int *array;
+};
+AStack* createS(){
+    struct AStack *Ast= new AStack();
+    Ast->capacity=1;
+    Ast->top=-1;
+    Ast->array=(int *)malloc(Ast->capacity * sizeof(int));
+    return Ast;
+}
+AStack* doublestack(AStack *stk){
+    stk->capacity*=2;
+    printf("called\n");
+    stk->array=(int *)realloc(stk->array, stk->capacity * sizeof(int));
+    return stk;
+}
+int pop(AStack* stk){
+    if(stk!=NULL)
+        return stk->array[stk->top--];
+    return -1;
+}
+void push(AStack* stk,int data){
+    if(stk->top==(stk->capacity-1))
+        doublestack(stk);
+    stk->array[++stk->top]=data;
+}
+int main()
+{
+   AStack *stk=createS();
+   push(stk,1);
+   push(stk,2);
+   push(stk,3);
+   push(stk,4);
+   while(stk->top!=-1){
+       printf("%d\n",pop(stk));
+   }
+   return 0;
+}
