@@ -1,0 +1,56 @@
+struct Node{
+    int data;
+    Node* next;
+};
+
+void UnionOfSortedLinkedLists(Node *a,Node *b){
+    Node* a1 = new Node();
+    Node* b1 = new Node();
+    a1=a;
+    b1=b;
+    Node* u = new Node();
+    Node* u1 = new Node();
+    u1=u;
+    while(a1 != NULL || b1 != NULL){
+        if(a1!=NULL && b1==NULL){
+            if(u->data!=a1->data){
+                u->next=a1;
+                u=u->next;
+            }
+            a1=a1->next;
+        }else if(a1==NULL && b1!=NULL){
+            if(u->data!=b1->data){
+                u->next=b1;
+                u=u->next;
+            }
+            b1=b1->next;
+        }else{
+            if(a1->data<b1->data){
+                if(u->data!=a1->data){
+                    u->next=a1;
+                    u=u->next;
+                }
+                a1=a1->next;
+            }else if(a1->data==b1->data){
+                if(u->data!=a1->data){
+                    u->next=a1;
+                    u=u->next;
+                }
+                b1=b1->next;
+                a1=a1->next;
+            }else{
+                if(u->data!=b1->data){
+                    u->next=b1;
+                    u=u->next;
+                }
+                b1=b1->next;
+            }
+        }
+        u->next=NULL;
+    }
+    u1=u1->next;
+    while(u1 != NULL){
+        printf("%d ",u1->data);
+        u1=u1->next;
+    }
+}
