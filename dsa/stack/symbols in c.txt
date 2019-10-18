@@ -1,0 +1,57 @@
+#include<stdio.h>
+#include<string.h>
+#define MAX_SIZE 10000
+char A[MAX_SIZE];
+int top=-1;
+void Push(char x){
+     if(top==MAX_SIZE-1){
+         return;
+     }
+     A[++top]=x;
+}
+void Pop(){
+     if(top==-1){
+         return;
+     }
+	top--;
+}
+char Top(){
+	if(top>-1){
+		return A[top];
+	}
+}
+int main(){
+	int i;
+	scanf("%d",&i);
+	for(int j=0;j<i;j++){
+	char A[10000];
+	scanf("%s",A);
+	for(int i=0;i<strlen(A);i++){
+		if((A[i]=='(') || (A[i]=='[') || (A[i]=='{')){
+			Push(A[i]);
+		}
+		else {
+			if(top>-1){
+				char b=Top();
+				if(((A[i]==')') && (b=='(')) || ((A[i]==']') && (b=='[')) || ((A[i]=='}') && (b=='{'))) {
+					Pop();
+					continue;
+				}
+				else{
+					break;
+				}
+			}
+			else{
+			top=1;
+			}
+		}
+	}
+	if(top==-1){
+		printf("YES\n");
+		top=-1;	
+	}else{
+		printf("NO\n");
+		top=-1;
+	}
+	}
+}
