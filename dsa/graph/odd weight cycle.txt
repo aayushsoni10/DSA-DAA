@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+#define s second
+#define f first
+using namespace std;
+
+int main(){
+    int n, m;
+    cin>>n>>m;
+    vector<pair<int, pair<int, int>>> edges;
+    int cnt = 0;
+    for(int i=0;i<m;i++){
+        int a,b,c;
+        cin>>a>>b>>c;
+        edges.push_back({c, {a, b}});
+        if(c%2 == 1){}else{cnt++;}
+    }
+    vector<int> adj[n+cnt];
+    int j=0;
+    for(int i=0;i<m;i++){
+        int a,b,c;
+        a = edges[i].s.f;
+        b = edges[i].s.s;
+        if(edges[i].f%2==0){
+            adj[a].push_back(n + j);
+            adj[b].push_back(n + j);
+            adj[n+j].push_back(a);
+            adj[n+j].push_back(b);
+            j++;
+        }else{
+            adj[a].push_back(b);
+            adj[b].push_back(a);
+        }
+    }
+    queue<int> q;
+    vector<int> col(n+cnt, -1);
+    col[0] = 1;
+    q.push(0);
+    int ans = 0;
+    while(!q.empty()){
+        int c = q.front();
+        q.pop();
+        for(auto i : adj[c]){
+            if(col[i]==-1){
+                col[i] = !col[c];
+                q.push(i);
+            }else if(col[i] == col[c]){
+                ans = 1;
+                break;
+            }
+        }
+    }
+    cout<<ans;
+    return 0;
+}
