@@ -1,0 +1,65 @@
+/*
+You are given flights route map of a country consisting of N cities and M undirected flight routes. Each city has an airport and each airport can work as layover. The airport will be in two states, Loading and Running. In loading state, luggage is loaded into the planes. In the running state, planes will leave the airport for the next city. All the airports will switch their states from Loading to Running and vice versa after every T minutes. You can cross a city if its airport state is running. Initially, all the airports are in running state. At an airport, if its state is loading, you have to wait for it to switch its state to running. The time taken to travel through any flight route is C minutes. Find the lexicographically smallest path which will take the minimum amount of time (in minutes) required to move from city X to city Y.
+
+It is guaranteed that the given flight route map will be connected. Graph won't contain multiple edges and self loops. A self loop is an edge that connects a vertex to itself.
+*/
+#include<bits/stdc++.h>
+using namespace std;
+int graph[1000][1000]={{0}};
+
+void bfs(int n, int x, int y,int c,int t){
+    int tim[n];
+    for(int i=0;i<n;i++){
+        tim[i]=10000;
+    }
+    int vis[n]={0};
+    int par[n]={0};
+    queue<pair<int,int>> q;
+    vis[x]=1;
+    tim[x]=0;
+    par[x]=-1;
+    q.push(make_pair(x,0));
+    int i11=0;
+    while(!q.empty()){
+        int v=q.front().first;
+        int v2 = q.front().second;
+        q.pop();
+        int n1=0;
+        if((v2/t)%2==1){
+            n1=t-(v2%t);
+        }
+        for(int i=0;i<n;i++){
+            if((!vis[i] || tim[i]>(tim[v]+c+n1)) && graph[v][i]){
+                vis[i]=1;
+                par[i]=v;
+                tim[i] = tim[v]+c+n1;
+                q.push(make_pair(i,v2+c+n1));
+            }
+        }
+    }
+    int i=y;
+    vector<int> ans;
+    ans.push_back(i);
+    while(par[i]!=-1){
+        ans.push_back(par[i]);
+        i=par[i];
+    }
+    printf("%d\n",ans.size());
+    for(int i=0;i<(int)ans.size();i++){
+        printf("%d ",ans[(int)ans.size()-1-i]+1);
+    }
+}
+int main(){
+    int n,m,t,c;
+    scanf("%d %d %d %d",&n,&m,&t,&c);
+    for(int i=0;i<m;i++){
+        int a,b;
+        scanf("%d %d",&a,&b);
+        graph[a-1][b-1]=1;
+        graph[b-1][a-1]=1;
+    }
+    int x,y;
+    scanf("%d %d",&x,&y);
+    bfs(n,x-1,y-1,c,t);
+    return 0;
+}
