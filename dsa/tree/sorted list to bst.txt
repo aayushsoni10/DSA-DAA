@@ -1,0 +1,110 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+TreeNode* util(ListNode* A,int s,int e){
+    if(s>e)
+        return NULL;
+    int mid=s+((e-s)/2);
+    int m2=mid;
+    ListNode* t=A;
+    while(mid>0){
+        t=t->next;
+        mid--;
+    }
+    TreeNode* root=(TreeNode*) malloc(sizeof(TreeNode));
+	// this malloc is necessary
+    root->left=NULL;
+    root->right=NULL;
+    root->val=t->val;
+    ListNode* y=t->next;
+    free(t);
+    if(s==e){
+        return root;
+    }
+    root->left=util(A,s,m2-1);
+    root->right=util(y,0,e-(m2+1));
+    return root;
+}
+TreeNode* Solution::sortedListToBST(ListNode* A) {
+    // Do not write main() function.
+    // Do not read input, instead use the arguments to the function.
+    // Do not print the output, instead return values as specified
+    // Still have a doubt. Checkout www.interviewbit.com/pages/sample_codes/ for more details
+    int l=0;
+    ListNode* t=A;
+    while(t){
+        l++;
+        t=t->next;
+    }
+    TreeNode* ans=util(A,0,l-1);
+    return ans;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+TreeNode *newNode(int data)
+{
+    TreeNode *temp;
+    //cout<<"pass"<<endl;
+    temp = (TreeNode *)malloc(sizeof(TreeNode));
+    //cout<<"pass1"<<endl;
+    temp->val = data;
+    temp->left = NULL;
+    temp->right = NULL;
+    return temp;
+}
+
+TreeNode *cal(vector<int> &v,int start,int end)
+{
+    if(start>end)
+        return NULL;
+    if(start == end)
+        return newNode(v[start]);
+    int mid = (start+end)/2;
+    TreeNode *head = newNode(v[mid]);
+    head->left = cal(v,start,mid-1);
+    head->right = cal(v,mid+1,end);
+    return head;
+}
+ 
+TreeNode* Solution::sortedListToBST(ListNode* A) {
+    vector<int> v;
+    ListNode *temp = A;
+    while(temp!=NULL)
+    {
+        v.push_back(temp->val);
+        temp = temp->next;
+    }
+    int size = v.size();
+    TreeNode *head;
+    head = cal(v,0,size-1);
+    return head;
+    // Do not write main() function.
+    // Do not read input, instead use the arguments to the function.
+    // Do not print the output, instead return values as specified
+    // Still have a doubt. Checkout www.interviewbit.com/pages/sample_codes/ for more details
+}
