@@ -1,0 +1,33 @@
+int maxRecHis(vector<int> A){
+    stack<int> s;
+    int max_area=0;
+    int i=0;
+    while(i<A.size()){
+        if(s.empty() || A[s.top()]<=A[i])
+            s.push(i++);
+        else{
+            int h=s.top();
+            s.pop();
+            int area=A[h]*((s.empty())?i:(i-s.top()-1));
+            if(max_area<area)
+                max_area=area;
+        }
+    }
+    while(!s.empty()){
+        int h=s.top();
+        s.pop();
+        int area=A[h]*((s.empty())?i:(i-s.top()-1));
+        if(max_area<area)
+            max_area=area;
+    }
+    return max_area;
+}
+int Solution::maximalRectangle(vector<vector<int> > &A) {
+    int x=maxRecHis(A[0]);
+    for(int i=1;i<A.size();i++){
+        for(int j=0;j<A[i].size();j++)
+            if(A[i][j]) A[i][j]+=A[i-1][j];
+        x=max(x,maxRecHis(A[i]));
+    }
+    return x;
+}
