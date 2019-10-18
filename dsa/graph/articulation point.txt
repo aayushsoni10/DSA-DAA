@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+int t = 0;
+void U(int i, vector<int> adj[], vector<int> &p, vector<int> &low, vector<int> &disc, vector<int> &vis, vector<int> &ap){
+    vis[i] = 1;
+    cout<<i<<endl;
+    int c=0;
+    disc[i]=low[i]=++t;
+    for(auto k:adj[i]){
+        if(!vis[k]){
+            c++;
+            p[k] = i;
+            U(k, adj, p, low, disc, vis, ap);
+            low[i] = min(low[i], low[k]);
+            if(p[k]==-1 && c>1)
+                ap[i] = 1;
+            if(p[k]!=-1 && low[k]>=disc[i])
+                ap[i] = 1;
+        }else{
+            if(k!=p[i]){
+                low[i] = min(low[i], disc[k]);
+            }
+        }
+    }
+}
+int main() {
+    int n;
+    cin>>n;
+    int m;
+    cin>>m;
+    vector<int> adj[n];
+    for(int i=0;i<m;i++){
+        int a,b;
+        cin>>a>>b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+    vector<int> parent(n, -1), low(n, -1), disc(n, -1), vis(n,0), ap(n, 0);
+    for(int i=0;i<n;i++)
+        if(!vis[i])
+            U(i, adj, parent, low, disc, vis, ap);
+    for(int i=0;i<n;i++)
+        if(ap[i])
+            cout<<i<<' ';
+    return 0;
+}
