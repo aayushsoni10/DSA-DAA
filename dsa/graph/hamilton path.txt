@@ -1,0 +1,68 @@
+Micro is having a graph having N vertices numbered from 1 to N and M edges. All the edges are bidirectional. Micro wants to find out the number of lucky permutations in the graph.
+A permutation of the vertices  is called lucky permutation, if for every vertex , where , there is an edge between  and . Help Micro find out the number of lucky permutations in the graph.
+
+Input:
+First line consists of two space separated integers denoting N and M.
+M lines follow each consisting of two space separated integers X and Y denoting there is an edge between vertices numbered X and Y.
+
+Output:
+Print the number of lucky permutations in the graph.
+
+CODE:
+
+/*
+// Sample code to perform I/O:
+
+cin >> name;                            // Reading input from STDIN
+cout << "Hi, " << name << ".\n";        // Writing output to STDOUT
+
+// Warning: Printing unwanted or ill-formatted data to output will cause the test cases to fail
+*/
+
+// Write your code here
+#include<bits/stdc++.h>
+using namespace std;
+void dfsU(vector<unordered_set<int>> adj, int n, int c, vector<bool> &vis, int &ans, int i){
+    if(c==n){
+        ans++;
+        vis[i] = 0;
+        return;
+    }
+    for(auto j : adj[i])
+        if(!vis[j]){
+            vis[j] = 1;
+            dfsU(adj, n, c+1, vis, ans, j);
+        }
+    vis[i] = 0;
+}
+void solve(vector<unordered_set<int>> adj, int n, int &ans){
+    vector<bool> vis(n, 0);
+    for(int i=0;i<n;i++){
+        vis[i] = 1;
+        dfsU(adj, n, 1, vis, ans, i);
+    }
+}
+int main(){
+    int n, m;
+    cin>>n>>m;
+    vector<vector<int>> arr(n, vector<int>(n, 0));
+    for(int i=0;i<m;i++){
+        int s,d;
+        cin>>s>>d;
+        s--;d--;
+        arr[s][d] = 1;
+        arr[d][s] = 1;
+    }
+    int ans = 0;
+    vector<int> v;
+    for(int i=0;i<n;i++)
+        v.push_back(i);
+    do{
+        int c = 1;
+        for(int i=0;i<n-1;i++)
+            if(arr[v[i]][v[i+1]]==0)
+                c = 0;
+        if(c)ans++;
+    }while(next_permutation(v.begin(), v.end()));
+    cout<<ans<<endl;
+}
