@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+bool myCom(const pair<int,int> &a, const pair<int,int> &b){
+    return a.first>b.first;
+}
+int main() {
+	int t;
+	cin>>t;
+	while(t--){
+	    int n;
+	    cin>>n;
+	    vector<pair<int, int>> arr(n);
+	    int mt=0;
+	    for(int i=0;i<n;i++){
+	        int id, d, pr;
+	        cin>>id>>d>>pr;
+	        arr[id-1] = {pr, d};
+	        mt = max(mt, d);
+	    }
+	    sort(arr.begin(), arr.end(), myCom);
+	    vector<int> jobs(mt, -1);
+	    jobs[arr[0].second-1] = arr[0].first;
+	    int ans=arr[0].first;
+	    for(int i=1;i<n;i++){
+	        for(int j=arr[i].second-1;j>=0;j--){
+	            if(arr[i].first>jobs[j]){
+	                if(jobs[j]!=-1)ans-=jobs[j];
+	                jobs[j] = arr[i].first;
+	                ans+=jobs[j];
+	                break;
+	            }
+	        }
+	    }
+	    int j=0;
+	    for(int i=0;i<mt;i++)
+	        if(jobs[i]!=-1)
+	            j++;
+	    cout<<j<<' '<<ans<<endl;
+	}
+	return 0;
+}
