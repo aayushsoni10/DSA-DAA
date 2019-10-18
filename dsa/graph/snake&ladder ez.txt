@@ -1,0 +1,30 @@
+int quickestWayUp(vector<vector<int>> l, vector<vector<int>> s) {
+    vector<int> dist(100,1000);
+    priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
+    vector<int> arr(100,0);
+    for(int i=0;i<(int)l.size();i++)
+        arr[l[i][0]-1]=l[i][1]-1;
+    for(int i=0;i<(int)s.size();i++)
+        arr[s[i][0]-1]=s[i][1]-1;
+    pq.push(make_pair(0,0));
+    dist[0]=0;
+    while(!pq.empty()){
+        int no=pq.top().second;
+        if(arr[no]!=0){
+            int y=dist[no];
+            no=arr[no];
+		 if(dist[no]>y)
+            	dist[no]=y;
+        }
+        pq.pop();
+        for(int i=1;i<7;i++){
+            if(no+i<=99 && dist[no+i]>dist[no]+1){
+                dist[no+i]=dist[no]+1;
+                pq.push(make_pair(dist[no+i],no+i));
+            }
+        }
+    }
+    if(dist[99]==1000)
+        return -1;
+    return dist[99];
+}
