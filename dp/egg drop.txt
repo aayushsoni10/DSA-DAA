@@ -1,0 +1,59 @@
+/*
+// Sample code to perform I/O:
+
+cin >> name;                            // Reading input from STDIN
+cout << "Hi, " << name << ".\n";        // Writing output to STDOUT
+
+// Warning: Printing unwanted or ill-formatted data to output will cause the test cases to fail
+*/
+
+// Write your code here
+#include<bits/stdc++.h>
+using namespace std;
+vector<vector<int>> dp;
+void create_dp(){
+    int e=dp.size()-1;
+    int f=dp[0].size()-1;
+    for(int i=1;i<=e;i++){
+        dp[i][0]=0;
+        dp[i][1]=1;
+    }
+    for(int i=1;i<=f;i++)
+        dp[1][i]=i;
+    for(int i=2;i<=e;i++)
+        for(int j=2;j<=f;j++){
+            dp[i][j]=INT_MAX;
+            for(int x=1;x<=j;x++){
+                int res=1+max(dp[i-1][x-1],dp[i][j-x]);
+                if(dp[i][j]>res)
+                    dp[i][j]=res;
+            }
+        }
+}
+int main(){
+    int t;
+    scanf("%d",&t);
+    int max_f=INT_MIN;
+    int max_e=INT_MIN;
+    vector<pair<int,int>> q(t);
+    int i=0;
+    while(t!=0)
+    {
+        int u,v;
+        scanf("%d %d",&u,&v);
+        q[i]=make_pair(u,v);
+        if(max_f<q[i].first)
+            max_f=q[i].first;
+        if(max_e<q[i].second)
+            max_e=q[i].second;
+        i++;
+        t--;
+    }
+    dp.clear();
+    dp.resize(max_e+1,vector<int>(max_f+1,0));
+    create_dp();
+    for(int i=0;i<q.size();i++){
+        printf("%d\n",dp[q[i].second][q[i].first]);
+    }
+    return 0;
+}
