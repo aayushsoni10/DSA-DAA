@@ -1,0 +1,25 @@
+class Solution {
+public:
+    void sU(vector<vector<int>> &ans,vector<int> used,vector<int> nums,int ind){
+        if(ind==nums.size()){
+            vector<int> su;
+            for(int i=0;i<nums.size();i++)
+                if(used[i])
+                    su.push_back(nums[i]);
+            ans.push_back(su);
+            return;
+        }
+        if(ind>nums.size())
+            return;
+        used[ind]=1;
+        sU(ans,used,nums,ind+1);
+        used[ind]=0;
+        sU(ans,used,nums,ind+1);
+    }
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> ans;
+        vector<int> used(nums.size(),0);
+        sU(ans,used,nums,0);
+        return ans;
+    }
+};
