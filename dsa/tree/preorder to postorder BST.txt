@@ -1,0 +1,85 @@
+#include <bits/stdc++.h>
+#define f first
+#define s second
+using namespace std;
+
+int main() {
+	//code
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+	int t;
+	cin>>t;
+	while(t-->0){
+	    int n;
+	    cin>>n;
+	    int arr[n];
+	    vector<int> out;
+	    for(int i=0;i<n;i++)
+	        cin>>arr[i];
+	    stack<int> s2; 
+  
+    // Initialize current root as minimum possible 
+    // value 
+        int root = INT_MIN; 
+  
+	    int b=1;
+    // Traverse given array 
+        for (int i=0; i<n; i++) 
+        { 
+        // If we find a node who is on right side 
+        // and smaller than root, return false 
+            if (arr[i] < root) 
+                b=0; 
+  
+        // If pre[i] is in right subtree of stack top, 
+        // Keep removing items smaller than pre[i] 
+        // and make the last removed item as new 
+        // root. 
+            while (!s2.empty() && s2.top()<arr[i]) 
+            { 
+                root = s2.top(); 
+                s2.pop(); 
+            } 
+  
+        // At this point either stack is empty or 
+        // pre[i] is smaller than root, push pre[i] 
+            s2.push(arr[i]); 
+        } 
+	    if(b==0){
+	        cout<<"NO"<<endl;
+	        continue;
+	    }
+	    stack<pair<int,pair<int,int>>> s1;
+	    s1.push(make_pair(arr[0],make_pair(INT_MIN,INT_MAX)));
+	    int i=1;
+	    while(i<n){
+	        if(arr[i]>s1.top().s.f && arr[i]<s1.top().f){
+	            s1.push(make_pair(arr[i],make_pair(s1.top().s.f,s1.top().f)));
+	        }else if(arr[i]>s1.top().f && arr[i]<s1.top().s.s){
+	            s1.push(make_pair(arr[i],make_pair(s1.top().f,s1.top().s.s)));
+	        }else{
+	            while(!s1.empty() && (arr[i]<s1.top().s.f || arr[i]>s1.top().s.s)){
+	                out.push_back(s1.top().f);
+	                s1.pop();
+	            }
+	            if(s1.empty()){
+	                b=0;
+	                break;
+	            }else{
+	                i--;
+	            }
+	        }
+	        i++;
+	    }
+	    while(!s1.empty()){
+	        out.push_back(s1.top().f);
+	        s1.pop();
+	    }
+	    for(int i=0;i<n;i++){
+	        cout<<out[i]<<' ';
+	    }
+	    cout<<endl;
+	}
+	return 0;
+}
