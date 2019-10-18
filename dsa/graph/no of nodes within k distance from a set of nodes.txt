@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int bfs(vector<int> adj[], vector<int> &dis, int u, vector<bool> &mark){
+    int lm;
+    queue<int> q;
+    q.push(u);
+    dis[u] = 0;
+    while(!q.empty()){
+        int c = q.front();
+        if(mark[c])
+            lm = c;
+        q.pop();
+        for(auto i : adj[c]){
+            if(dis[i] == -1){
+                dis[i] = dis[c] + 1;
+                q.push(i);
+            }
+        }
+    }
+    return lm;
+}
+int fun(int marked[], int edges[][2], int k, int V, int N){
+    vector<int> adj[V+1];
+    for(int i=0;i<V;i++){
+        adj[edges[i][0]].push_back(edges[i][1]);
+        adj[edges[i][1]].push_back(edges[i][0]);
+    }
+    vector<bool> mark(V+1, false);
+    for(int i=0;i<N;i++){
+        mark[marked[i]]=1;
+    }
+    vector<int> dis(V+1, -1), dis2(V+1, -1), dis3(V+1, -1);
+    
+    int a = bfs(adj, dis, 0, mark);
+    int b = bfs(adj, dis2, a, mark);
+    int c = bfs(adj, dis3, b, mark);
+    int count = 0;
+    for(int i=0;i<=V;i++)
+        if(dis2[i]<=k && dis3[i]<=k)
+            count++;
+    return count;
+}
+int main() 
+{ 
+    int edges[][2] =  
+    { 
+        {1, 0}, {0, 3}, {0, 8}, {2, 3}, 
+        {3, 5}, {3, 6}, {3, 7}, {4, 5}, 
+        {5, 9} 
+    }; 
+    int V = sizeof(edges) / sizeof(edges[0]); 
+      
+    int marked[] = {1, 2, 4}; 
+    int N = sizeof(marked) / sizeof(marked[0]); 
+  
+    int K = 3; 
+    cout<<fun(marked, edges, K, V, N);
+    return 0; 
+}
