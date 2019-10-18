@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+#define f first
+#define s second
+
+using namespace std;
+
+int main(){
+    int n;
+    cin>>n;
+    vector<vector<char>> adj(n, vector<char>(n));
+    vector<vector<int>> dis(n, vector<int>(n, INT_MAX));
+    queue<pair<int, pair<int, int>>> pq;
+    for(int i=0;i<n;i++)
+        for(int j=0;j<n;j++){
+            cin>>adj[i][j];
+            if(adj[i][j] == 'G' ){
+                pq.push({0, {i, j}});
+                dis[i][j] = 0;
+            }else if(adj[i][j] == 'W')
+                dis[i][j] = -1;
+        }
+    while(!pq.empty()){
+        int w = pq.front().f;
+        int i = pq.front().s.f;
+        int j = pq.front().s.s;
+        pq.pop();
+        if(w != dis[i][j])
+            continue;
+        if(i-1>=0 && dis[i-1][j]>dis[i][j] + 1 && adj[i-1][j]!='W'){
+            dis[i-1][j] = dis[i][j] + 1;
+            pq.push({dis[i-1][j], {i-1, j}});
+        }
+        if(j-1>=0 && dis[i][j-1]>dis[i][j] + 1 && adj[i][j-1]!='W'){
+            dis[i][j-1] = dis[i][j] + 1;
+            pq.push({dis[i][j-1], {i, j-1}});
+        }
+        if(i+1<n && dis[i+1][j]>dis[i][j] + 1 && adj[i+1][j]!='W'){
+            dis[i+1][j] = dis[i][j] + 1;
+            pq.push({dis[i+1][j], {i+1, j}});
+        }
+        if(j+1<n && dis[i][j+1]>dis[i][j] + 1 && adj[i][j+1]!='W'){
+            dis[i][j+1] = dis[i][j] + 1;
+            pq.push({dis[i][j+1], {i, j+1}});
+        }
+    }
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++)
+            cout<<dis[i][j]<<' ';
+        cout<<endl;
+    }
+}
