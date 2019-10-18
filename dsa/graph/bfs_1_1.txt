@@ -1,0 +1,67 @@
+/*
+Colonel Oliver and his battalion were in midst of a battle against an extraterrestrial species Zomni. The Colonel has to win the battle at any cost to save all of humanity. He was short of soldiers, however, he had a very powerful weapon bazooka which could be used only once during the war.
+
+The Zomni army was divided into small troops scattered at different locations (which can be contained in a N x M battle ground). The bazooka, once launched on some troop is capable of killing all the Zomnis of that troop at a time but cannot harm any Zomni soldier in other troops.
+
+The war is coming to an end and the Colonel is about to lose. He has only one bazooka but something he knows for sure is that if he is able to kill the maximum possible soldiers with this bazooka, he and his soldiers definitely have a chance of winning the battle.
+
+So, the Colonel seeks your help in finding out the maximum number of Zomnis he can kill in one strike of the bazooka and also the total number of Zomni troops gathered against them so that he can divide his battalion efficiently (the troop killed by the bazooka should also be included).
+
+Two Zomni soldiers belong to the same troop if they are at adjacent positions in the battle ground. Therefore, any soldier who is not at some boundary of the battle ground can have a maximum of 8 adjacent soldiers.*/
+
+// Write your code here
+#include<bits/stdc++.h>
+using namespace std;
+int g[1002][1002]={0};
+int vis[1002][1002]={0};
+int count(int x,int y,int n,int m){
+    vis[x][y]=1;
+    int c=0;
+    queue<pair<int,int>> q;
+    q.push(make_pair(x,y));
+    while(!q.empty()){
+        int x1=q.front().first;
+        int x2=q.front().second;
+        q.pop();
+        c++;
+        for(int i=-1;i<=1;i++){
+            for(int j=-1;j<=1;j++){
+                if(vis[x1+i][x2+j]==0 && g[x1+i][x2+j]==1){
+                    vis[x1+i][x2+j]=1;
+                    q.push(make_pair(x1+i,x2+j));
+                }
+            }
+        }
+    }
+    return c;
+}
+int main(){
+    int t;
+    scanf("%d",&t);
+    for(int i=0;i<t;i++){
+        int n,m;
+        scanf("%d %d",&n,&m);
+        for(int j=0;j<=1001;j++){
+            for(int k=0;k<=1001;k++){
+                g[j][k]=0;
+                vis[j][k]=0;
+            }
+        }
+        for(int j=1;j<=n;j++){
+            for(int k=1;k<=m;k++){
+                scanf("%d",&g[j][k]);
+            }
+        }
+        int ans=0;
+        int tc=0;
+        for(int i1=1;i1<=n;i1++){
+            for(int j=1;j<=m;j++){
+                if(!vis[i1][j] && g[i1][j]){
+                    ans=max(ans,count(i1,j,n,m));
+                    tc++;
+                }
+            }
+        }
+        printf("%d %d\n",tc,ans);
+    }
+}
