@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	//code
+	int t;
+	cin>>t;
+	while(t-->0){
+	    int r,c;
+	    cin>>r>>c;
+	    vector<vector<int>> arr(r, vector<int>(c,0));
+	    for(int i=0;i<r;i++)
+	        for(int j=0;j<c;j++)
+	            cin>>arr[i][j];
+	    int max1=0;
+	    vector<int> cur(r,0);
+	    for(int l=0;l<c;l++){
+	        for(int r1=l;r1<c;r1++){
+	            for(int i=0;i<r;i++){
+	                cur[i]+=arr[i][r1];
+	            }
+	            int ms=0;
+	            int ps=0;
+	            for(int i=0;i<r;i++){
+	                if(cur[i]>cur[i]+ps){
+	                    ps=cur[i];
+	                }else{
+	                    ps = cur[i]+ps;
+	                }
+	                ms=max(ms, ps);
+	            }
+	            max1=max(max1, ms);
+	        }
+	        for(int i=0;i<r;i++)
+	            cur[i]=0;
+	    }
+	    cout<<max1<<endl;
+	}
+	return 0;
+}
