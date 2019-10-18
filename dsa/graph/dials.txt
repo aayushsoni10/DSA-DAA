@@ -1,0 +1,40 @@
+#include<bits/stdc++.h>
+using namespace std;
+void Dials(vector<pair<int, int>> adj[], int n, int s, int m){
+    vector<queue<int>> bucket(m*n);
+    bucket[0].push(s);
+    vector<int> dis(n, INT_MAX);
+    dis[s] = 0;
+    for(int i=0;i<m*n;i++){
+        if(bucket[i].empty()){
+            continue;
+        }
+        int v = bucket[i].front();
+        bucket[i].pop();
+        i--;
+        for(auto k : adj[v]){
+            if(dis[k.first] > dis[v] + k.second){
+                dis[k.first] = dis[v] + k.second;
+                bucket[dis[k.first]].push(k.first);
+            }
+        }
+    }
+    for(auto k : dis)
+        cout<<k<<' ';
+}
+int main(){
+    int n;
+    cin>>n;
+    int m;
+    cin>>m;
+    vector<pair<int, int>> adj[n];
+    int ma = 0;
+    for(int i=0;i<m;i++){
+        int a,b,c;
+        cin>>a>>b>>c;
+        adj[a].push_back({b, c});
+        adj[b].push_back({a, c});
+        ma = max(ma, c);
+    }
+    Dials(adj, n, 0, ma);
+}
