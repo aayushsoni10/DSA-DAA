@@ -1,0 +1,44 @@
+#include <iostream>
+#include <stack>
+using namespace std;
+int MaxRecArea(int A[],int n){
+    int MA=-1,CA=0,i,top;
+    stack<int> S;
+    for(i=0;i<n;i++){
+        if(S.empty()){
+            S.push(i);
+        }else{
+            while(A[i]<A[S.top()]){
+                top=S.top();
+                S.pop();
+                if(S.empty()){
+                    CA=A[top]*i;
+                }else{
+                    CA=A[top]*(i-S.top()-1);
+                }
+                if(CA>MA)
+                    MA=CA;
+            }
+            S.push(i);
+        }
+    }
+    while(!S.empty()){
+        top=S.top();
+        S.pop();
+        if(S.empty()){
+            CA=A[top]*i;
+        }else{
+            CA=A[top]*(i-S.top()-1);
+        }
+        if(CA>MA)
+            MA=CA;
+    }
+    return MA;
+}
+
+int main() {
+	int A[]={1,2,5,2};
+	printf("hello");
+	printf("%d",MaxRecArea(A,4));
+	return 0;
+}
