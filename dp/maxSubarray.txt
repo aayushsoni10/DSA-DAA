@@ -1,0 +1,25 @@
+vector<int> maxSubarray(vector<int> arr) {
+    vector<int> ans(2,0);
+    int ps=0;
+    int ms=INT_MIN;
+    int lp=INT_MIN;
+    vector<int> arr2(arr.size(), 0);
+    for(int i=0;i<arr.size();i++){
+        if(arr[i]>=0){
+            ans[1]+=arr[i];
+        }
+        lp=max(lp,arr[i]);
+        if(arr[i]>arr[i]+ps){
+            arr2[i] = arr[i];
+            ps = arr[i];
+        }else{
+            arr2[i] = arr[i]+ps;
+            ps+=arr[i];
+        }
+        ms = max(ms, arr2[i]);
+    }
+    if(lp<=0)
+        ans[1]=lp;
+    ans[0] = ms;
+    return ans;
+}
