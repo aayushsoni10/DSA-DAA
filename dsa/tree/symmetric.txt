@@ -1,0 +1,22 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+#define l left
+#define r right
+int isSame(TreeNode* A, TreeNode* B){
+    if(!A && !B)
+        return 1;
+    if(!A || !B)
+        return 0;
+    return A->val==B->val && isSame(A->l, B->r) && isSame(A->r, B->l);
+}
+int Solution::isSymmetric(TreeNode* A) {
+    if(!A)  return 1;
+    return isSame(A->left, A->right);
+}
