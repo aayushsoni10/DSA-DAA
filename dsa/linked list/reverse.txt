@@ -1,0 +1,66 @@
+#include <iostream>
+
+using namespace std;
+struct Node{
+    int data;
+    Node* next;
+};
+
+Node* reverse(Node *head)
+{
+    if(head==NULL)
+        return head;
+    Node *c=head;
+    Node *r=head->next;
+    if(r==NULL)
+        return c;
+    Node* nh=reverse(r);
+    c->next->next=c;
+    c->next=NULL;
+    return nh;
+  // Your code here
+}
+
+Node* reverseR(Node *head,Node *prev){
+    Node *temp=head->next;
+    head->next=prev;
+    Node *temp2=head;
+    if(temp==NULL){
+        return temp2;
+    }
+    return reverseR(temp,temp2);
+}
+
+Node* reverse(Node *head){
+    Node* temp;
+    temp=NULL;
+    Node* temp2;
+    Node* temp3;
+    temp2=head;
+    while(temp2!=NULL){
+        temp3=temp2->next;
+        temp2->next=temp;
+        temp=temp2;
+        temp2=temp3;
+    }
+    return temp;
+}
+void PrintL(Node* head){
+    while(head!=NULL){
+        printf("%d\n",head->data);
+        head=head->next;
+    }
+}
+int main() {
+    Node* h1 = new Node();
+    h1->data=2;
+    h1->next=NULL;
+    Node* h = new Node();
+    h->data=1;
+    h->next=h1;
+    PrintL(h);
+    Node* rev = new Node();
+    rev=reverse(h);
+    PrintL(rev);
+    return 0;
+}
