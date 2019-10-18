@@ -1,0 +1,73 @@
+void bfs (int start)
+{
+            deque <int > Q;     //Double-ended queue
+            Q.push_back( start); 
+            distance[ start ] = 0;       
+            while( !Q.empty ())
+            {
+                int v = Q.front( );
+                Q.pop_front(); 
+                for( int i = 0 ; i < edges[v].size(); i++)
+               {
+
+
+/* if distance of neighbour of v from start node is greater than sum of distance of v from start node and edge weight between v and its neighbour (distance between v and its neighbour of v) ,then change it */  
+
+
+                    if(distance[ edges[ v ][ i ].first ] > distance[ v ] + edges[ v ][ i ].second ) 
+                {
+
+                    distance[ edges[ v ][ i ].first ] = distance[ v ] + edges[ v ][ i ].second;
+
+                /*if edge weight between v and its neighbour is 0 then push it to front of
+        double ended queue else push it to back*/
+
+                    if(edges[ v ][ i ].second == 0)
+                    {
+                        Q.push_front( edges[ v ][ i ].first);
+                    }
+                    else
+                    {
+                            Q.push_back( edges[ v ][ i ].first);
+
+                    }
+                }
+              }
+           }
+    }
+
+or
+
+
+int bfs_0_1()
+{
+	vector<int> dist(n, INT_MAX);
+	vector<bool> vis(n, 0);
+	dist[0] = 0;
+	deque<int> q;
+	q.push_back(0);
+	while(!q.empty())
+	{
+		int u = q.front();
+		q.pop_front();
+		if(vis[u])
+			continue;
+		vis[u] = 1;
+		for(auto p:g[u])
+		{
+			int v = p.f, w = p.s;
+			if(!vis[v] && dist[v] > dist[u] + w)
+			{
+				dist[v] = dist[u] + w;
+				if(w==0)
+					q.push_front(v);
+				else
+					q.push_back(v);
+			}
+		}
+	}
+	if(!vis[n-1])
+		return -1;
+	else
+		return dist[n-1];
+}
