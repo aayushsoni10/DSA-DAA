@@ -1,0 +1,58 @@
+# This is the definition for class Node.
+class Node:
+	def __init__(self, data, nextNode):
+		self.data = data
+		self.next = nextNode
+
+# Do not modify anything above.
+#You can add any number of util functions here.
+
+
+#Do not change the function signature below
+def UnionOfSortedLinkedLists(a, b):
+    a2=a
+    b2=b
+    u1=Node(None,None)
+    u=u1
+    while(a2 is not None or b2 is not None):
+        if(a2 is None and b2 is not None):
+            if(u.data!=b2.data):
+                u.next=b2
+                u=u.next
+            b2=b2.next
+        elif (a2 is not None and b2 is None):
+            if(u.data!=a2.data):
+                u.next=a2
+                u=u.next
+            a2=a2.next
+        else:
+            if(a2.data<b2.data):
+                if(u.data!=a2.data):
+                    u.next=a2
+                    u=u.next
+                a2=a2.next
+            elif (a2.data==b2.data):
+                if(u.data!=a2.data):
+                    u.next=a2
+                    u=u.next
+                a2=a2.next
+                b2=b2.next
+            else:
+                if(u.data!=b2.data):
+                    u.next=b2
+                    u=u.next
+                b2=b2.next
+        u.next=None
+    u1=u1.next
+    return u1
+    
+#Do not change the function signature below
+def PrintMiddleLinkedList(head):
+    head1=head
+    c=[]
+    while(head1 is not None):
+	    c.append(head1.data)
+	    head1=head1.next
+    index=len(c)//2
+    print (c[index])
+    #add your code here
