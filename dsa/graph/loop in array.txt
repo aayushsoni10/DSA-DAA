@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+bool dfsu(vector<int> &vis, vector<int> adj[], int s){
+    vis[s] = 1;
+    int ans = 0;
+    for(auto i : adj[s]){
+        if(vis[i]==0){
+            ans = dfsu(vis, adj, i);
+            if(ans) break;
+        }
+        if(vis[i] == 1){
+            ans = 1;
+            break;
+        }
+    }
+    vis[s] = 2;
+    return ans;
+}
+int main() {
+	//code
+	int n;
+	cin>>n;
+	vector<int> arr(n, 0);
+	for(int i=0;i<n;i++)
+	    cin>>arr[i];
+	int ans = 0;
+	vector<int> adj[n];
+	vector<int> vis(n, 0);
+	for(int i=0;i<n;i++)
+	    if((i!=(i+arr[i]+n)%n))
+	        adj[i].push_back((i+arr[i]+n)%n);
+	for(int i=0;i<n;i++){
+	    if(!vis[i]){
+	        int a = dfsu(vis, adj, i);
+	        if(a)   {ans = 1;break;}
+	    }
+	}
+	cout<<ans;
+	return 0;
+}
