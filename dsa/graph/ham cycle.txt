@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+int has(vector<int> adj[], int i, int d){
+    for(auto k : adj[i])
+        if(k==d)
+            return true;
+    return false;
+}
+int solveU(vector<int> adj[], vector<bool> &vis, int i, int n, int c){
+    if(c==n && has(adj, i, 0)){
+        cout<<i<<' ';
+        return true;
+    }
+    for(auto j : adj[i]){
+        if(!vis[j]){
+            vis[j] = 1;
+            if(solveU(adj, vis, j, n, c+1)){
+                cout<<i<<' ';
+                return true;
+            }
+            vis[j] = 0;
+        }
+    }
+    vis[i] = 0;
+    return false;
+}
+int solve(vector<int> adj[], int n){
+    vector<bool> vis(n, 0);
+    vis[0] = 1;
+    if(solveU(adj, vis, 0, n, 1))   return true;
+    return false;
+}
+int main(){
+    int n,m;
+    cin>>n>>m;
+    vector<int> adj[n];
+    for(int i=0;i<m;i++){
+        int s,d;
+        cin>>s>>d;
+        adj[s].push_back(d);
+        adj[d].push_back(s);
+    }
+    cout<<(solve(adj, n)?"YES":"NO");
+}
